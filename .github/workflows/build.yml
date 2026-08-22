@@ -5,6 +5,8 @@ on:
     branches: [dev/constructor-rework]
     paths-ignore:
       - 'builds/**'
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -28,6 +30,7 @@ jobs:
           name: Mechanica
           path: build/libs/*.jar
       - name: Publish JAR in repository
+        if: github.event_name == 'push'
         shell: bash
         run: |
           mkdir -p builds
