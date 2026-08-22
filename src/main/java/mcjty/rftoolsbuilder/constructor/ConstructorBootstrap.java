@@ -21,7 +21,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 public final class ConstructorBootstrap {
-    public static final String MOD_ID = "rftoolsbuilder";
+    public static final String MOD_ID = "mechanica";
     private static final ResourceKey<CreativeModeTab> MAIN_TAB = ResourceKey.create(
             Registries.CREATIVE_MODE_TAB,
             Identifier.fromNamespaceAndPath(MOD_ID, "main")
