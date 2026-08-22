@@ -3,7 +3,12 @@ name: Build Mechanica
 on:
   push:
     branches: [dev/constructor-rework]
+    paths-ignore:
+      - 'builds/**'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -22,3 +27,16 @@ jobs:
         with:
           name: Mechanica
           path: build/libs/*.jar
+      - name: Publish JAR in repository
+        shell: bash
+        run: |
+          mkdir -p builds
+          rm -f builds/Mechanica-*.jar
+          cp build/libs/Mechanica-*.jar builds/
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add builds
+          if ! git diff --cached --quiet; then
+            git commit -m "build: publish Mechanica JAR [skip ci]"
+            git push origin HEAD:dev/constructor-rework
+          fi
