@@ -6,7 +6,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -22,13 +21,15 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
- * Complete Quantum Tools entry point. The legacy Builder/Quarry systems and the
- * Constructor subsystem are registered under the original rftoolsbuilder id so
- * existing worlds keep their registry identities.
+ * Temporary Mechanica entry point during the package migration.
+ *
+ * The original package path is intentionally retained for this first migration
+ * pass so the Constructor can stay functional while the project identity,
+ * registries and resources move to the Mechanica namespace.
  */
 @Mod(RFToolsBuilder.MOD_ID)
 public final class RFToolsBuilder {
-    public static final String MOD_ID = "rftoolsbuilder";
+    public static final String MOD_ID = "mechanica";
 
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MOD_ID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MOD_ID);
@@ -64,7 +65,7 @@ public final class RFToolsBuilder {
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = TABS.register("main", () ->
             CreativeModeTab.builder()
-                    .title(Component.translatable("itemGroup.rftoolsbuilder"))
+                    .title(Component.translatable("itemGroup.mechanica"))
                     .icon(() -> BUILDER_ITEM.get().getDefaultInstance())
                     .displayItems((parameters, output) -> {
                         output.accept(BUILDER_ITEM.get());
@@ -91,8 +92,6 @@ public final class RFToolsBuilder {
         modBus.addListener(this::registerCapabilities);
         modBus.addListener(this::registerPayloads);
 
-        // Constructor is part of the same mod and must be generated from source
-        // in the same build, never injected into the compiled JAR afterwards.
         ConstructorBootstrap.init(modBus);
     }
 
