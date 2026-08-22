@@ -158,7 +158,7 @@ public final class SchematicTableScreen extends AbstractContainerScreen<Schemati
         gui.text(font, Component.literal("OUT"), x + 266, y + 38, QuantumUiTheme.MUTED, false);
 
         QuantumUiTheme.slotFrame(gui, x + 25, y + 64, menu.hasReservedInput(), QuantumUiTheme.CYAN);
-        QuantumUiTheme.slotFrame(gui, x + 255, y + 64, menu.hasOutput(), QuantumUiTheme.GREEN);
+        QuantumUiTheme.slotFrame(gui, x + 267, y + 64, menu.hasOutput(), QuantumUiTheme.GREEN);
 
         gui.text(font, Component.literal("creator"), x + 15, y + 90, QuantumUiTheme.MUTED, false);
         gui.text(font, Component.literal("card"), x + 20, y + 101, QuantumUiTheme.MUTED, false);

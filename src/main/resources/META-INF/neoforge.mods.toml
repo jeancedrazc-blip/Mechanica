@@ -4,25 +4,28 @@ license="MIT"
 
 [[mods]]
 modId="rftoolsbuilder"
-version="3.0.6-dev.19"
+version="${mod_version}"
 displayName="Quantum Tools"
 authors="McJty (original); Jean Cedraz / Desertic0 (26.1.2 port)"
 description='''
-Quantum Tools Constructor validation build for Minecraft 26.1.2 NeoForge.
-This dev.10 test build is produced directly from editable source and contains
-the vanilla-blue Constructor model, Placement Editor and active lighting work.
+Quantum Tools for Minecraft 26.1.2 NeoForge.
+Includes the Builder, Quarry tools, Constructor, schematic placement and
+material-management workflows.
 '''
+
+[[mixins]]
+config="quantumtools.mixins.json"
 
 [[dependencies.rftoolsbuilder]]
 modId="neoforge"
 type="required"
-versionRange="[26.1.2.95,)"
+versionRange="[${neo_version},)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.rftoolsbuilder]]
 modId="minecraft"
 type="required"
-versionRange="[26.1.2,26.1.3)"
+versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"

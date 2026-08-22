@@ -197,8 +197,6 @@ public class QuarryFilterScreen extends AbstractContainerScreen<QuarryFilterMenu
         gui.text(font, Component.literal(count + "/" + QuarryCardItem.MAX_FILTER_ENTRIES), x + 207, y + 36, QuantumUiTheme.TEXT_SOFT, false);
         gui.text(font, Component.literal("WHITE " + white), x + 14, y + 149, QuantumUiTheme.GREEN, false);
         gui.text(font, Component.literal("BLACK " + black), x + 78, y + 149, QuantumUiTheme.RED, false);
-        gui.text(font, Component.literal("Click inventory item to add · Shift-click = tags"), x + 14, y + 215, QuantumUiTheme.MUTED, false);
-
         QuantumUiTheme.panel(gui, x + 9, y + 163, x + 247, y + 212);
         QuantumUiTheme.panel(gui, x + 12, y + 187, x + 193, y + 208, QuantumUiTheme.BORDER_DIM, QuantumUiTheme.DEEP);
 

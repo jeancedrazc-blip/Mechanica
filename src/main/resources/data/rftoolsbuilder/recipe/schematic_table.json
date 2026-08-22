@@ -1,0 +1,1 @@
+{"type":"minecraft:crafting_shaped","category":"misc","pattern":["IGI","RCR","IPI"],"key":{"I":"minecraft:iron_ingot","G":"minecraft:glass_pane","R":"minecraft:redstone","C":"minecraft:crafting_table","P":"minecraft:piston"},"result":{"id":"rftoolsbuilder:schematic_table","count":1}}

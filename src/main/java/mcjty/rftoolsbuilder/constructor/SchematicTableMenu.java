@@ -36,7 +36,7 @@ public final class SchematicTableMenu extends AbstractContainerMenu {
                 @Override public boolean mayPickup(Player player) { return !table.isUploading(); }
                 @Override public int getMaxStackSize() { return 1; }
             });
-            addSlot(new Slot(table, SchematicTableBlockEntity.SLOT_OUTPUT, 255, 64) {
+            addSlot(new Slot(table, SchematicTableBlockEntity.SLOT_OUTPUT, 267, 64) {
                 @Override public boolean mayPlace(ItemStack stack) { return false; }
                 @Override public int getMaxStackSize() { return 1; }
             });
