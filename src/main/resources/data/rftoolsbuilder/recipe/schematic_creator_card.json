@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IRI",
+    "POP",
+    "III"
+  ],
+  "key": {
+    "I": "minecraft:iron_nugget",
+    "R": "minecraft:redstone",
+    "P": "minecraft:paper",
+    "O": "minecraft:orange_dye"
+  },
+  "result": {
+    "id": "rftoolsbuilder:schematic_creator_card",
+    "count": 1
+  }
+}

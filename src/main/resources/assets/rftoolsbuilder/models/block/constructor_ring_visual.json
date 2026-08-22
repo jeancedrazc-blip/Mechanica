@@ -1,0 +1,13 @@
+{
+  "credit": "Quantum Tools vanilla square energy pulse",
+  "textures": {
+    "beam": "rftoolsbuilder:block/constructor_beam",
+    "particle": "rftoolsbuilder:block/constructor_beam"
+  },
+  "elements": [
+    {"from":[1.5,1.5,7.5],"to":[3,14.5,8.5],"shade":false,"faces":{"north":{"texture":"#beam"},"east":{"texture":"#beam"},"south":{"texture":"#beam"},"west":{"texture":"#beam"},"up":{"texture":"#beam"},"down":{"texture":"#beam"}}},
+    {"from":[13,1.5,7.5],"to":[14.5,14.5,8.5],"shade":false,"faces":{"north":{"texture":"#beam"},"east":{"texture":"#beam"},"south":{"texture":"#beam"},"west":{"texture":"#beam"},"up":{"texture":"#beam"},"down":{"texture":"#beam"}}},
+    {"from":[3,1.5,7.5],"to":[13,3,8.5],"shade":false,"faces":{"north":{"texture":"#beam"},"east":{"texture":"#beam"},"south":{"texture":"#beam"},"west":{"texture":"#beam"},"up":{"texture":"#beam"},"down":{"texture":"#beam"}}},
+    {"from":[3,13,7.5],"to":[13,14.5,8.5],"shade":false,"faces":{"north":{"texture":"#beam"},"east":{"texture":"#beam"},"south":{"texture":"#beam"},"west":{"texture":"#beam"},"up":{"texture":"#beam"},"down":{"texture":"#beam"}}}
+  ]
+}

@@ -1,1 +1,0 @@
-Temporary bootstrap for repository initialization.

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["DED", "OBO", "IPI"],
+  "key": {
+    "D": "minecraft:diamond",
+    "E": "minecraft:ender_eye",
+    "O": "minecraft:obsidian",
+    "B": "rftoolsbuilder:builder",
+    "I": "minecraft:iron_block",
+    "P": "minecraft:piston"
+  },
+  "result": {"id":"rftoolsbuilder:constructor","count":1}
+}

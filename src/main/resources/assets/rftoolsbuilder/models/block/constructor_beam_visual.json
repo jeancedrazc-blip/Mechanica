@@ -1,0 +1,18 @@
+{
+  "credit": "Quantum Tools vanilla construction beam",
+  "textures": {
+    "beam": "rftoolsbuilder:block/constructor_beam",
+    "particle": "rftoolsbuilder:block/constructor_beam"
+  },
+  "elements": [
+    {"from":[7.25,7.25,0],"to":[8.75,8.75,16],"shade":false,"faces":{
+      "north":{"texture":"#beam"},"east":{"texture":"#beam"},"south":{"texture":"#beam"},
+      "west":{"texture":"#beam"},"up":{"texture":"#beam"},"down":{"texture":"#beam"}}},
+    {"from":[6.75,7.75,0],"to":[9.25,8.25,16],"shade":false,"faces":{
+      "north":{"texture":"#beam"},"east":{"texture":"#beam"},"south":{"texture":"#beam"},
+      "west":{"texture":"#beam"},"up":{"texture":"#beam"},"down":{"texture":"#beam"}}},
+    {"from":[7.75,6.75,0],"to":[8.25,9.25,16],"shade":false,"faces":{
+      "north":{"texture":"#beam"},"east":{"texture":"#beam"},"south":{"texture":"#beam"},
+      "west":{"texture":"#beam"},"up":{"texture":"#beam"},"down":{"texture":"#beam"}}}
+  ]
+}

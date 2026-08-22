@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "mcjty.rftoolsbuilder.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "RFToolsBuilderMixin",
+    "BuilderSpeedMixin"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

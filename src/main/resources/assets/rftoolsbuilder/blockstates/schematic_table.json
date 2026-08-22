@@ -1,0 +1,1 @@
+{"variants":{"facing=north":{"model":"rftoolsbuilder:block/schematic_table"},"facing=east":{"model":"rftoolsbuilder:block/schematic_table","y":90},"facing=south":{"model":"rftoolsbuilder:block/schematic_table","y":180},"facing=west":{"model":"rftoolsbuilder:block/schematic_table","y":270}}}
