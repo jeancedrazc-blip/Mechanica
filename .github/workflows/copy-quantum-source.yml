@@ -1,0 +1,38 @@
+name: Copy Quantum Tools source
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  copy-source:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Mechanica
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Clone Quantum Tools source branch
+        run: |
+          git clone --depth 1 --branch feature/schematic-create-parity-ui https://github.com/jeancedrazc-blip/Quamtum-Tolls.git /tmp/quantum-tools
+
+      - name: Replace repository contents with source copy
+        run: |
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          rsync -a --exclude='.git' /tmp/quantum-tools/ ./
+
+      - name: Commit copied source
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Copy Quantum Tools source"
+          git push origin main
