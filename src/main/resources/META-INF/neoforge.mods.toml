@@ -3,24 +3,23 @@ loaderVersion="[1,)"
 license="MIT"
 
 [[mods]]
-modId="rftoolsbuilder"
-version="3.0.6-dev.19"
-displayName="Quantum Tools"
-authors="McJty (original); Jean Cedraz / Desertic0 (26.1.2 port)"
+modId="mechanica"
+version="0.1.0-dev.1"
+displayName="Mechanica"
+authors="Mechanica contributors"
 description='''
-Quantum Tools Constructor validation build for Minecraft 26.1.2 NeoForge.
-This dev.10 test build is produced directly from editable source and contains
-the vanilla-blue Constructor model, Placement Editor and active lighting work.
+Mechanica is a vanilla-styled medieval technology mod focused on practical mechanical construction systems.
+The first development target is the Constructor, an energy-powered machine for placing and assembling structures from schematics.
 '''
 
-[[dependencies.rftoolsbuilder]]
+[[dependencies.mechanica]]
 modId="neoforge"
 type="required"
 versionRange="[26.1.2.95,)"
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.rftoolsbuilder]]
+[[dependencies.mechanica]]
 modId="minecraft"
 type="required"
 versionRange="[26.1.2,26.1.3)"
