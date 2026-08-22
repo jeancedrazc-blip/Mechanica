@@ -23,12 +23,13 @@ jobs:
           java-version: '25'
       - uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.14.3'
-      - run: gradle --no-daemon clean build
+          gradle-version: '9.2.1'
+      - run: gradle --no-daemon clean build --stacktrace
       - uses: actions/upload-artifact@v4
         with:
           name: Mechanica
           path: build/libs/*.jar
+          if-no-files-found: error
       - name: Publish JAR in repository
         if: github.event_name == 'push'
         shell: bash
