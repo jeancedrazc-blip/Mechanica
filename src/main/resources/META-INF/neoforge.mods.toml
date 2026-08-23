@@ -5,10 +5,10 @@ license="MIT"
 [[mods]]
 modId="rftoolsbuilder"
 version="${mod_version}"
-displayName="Quantum Tools"
+displayName="Mechanica"
 authors="McJty (original); Jean Cedraz / Desertic0 (26.1.2 port)"
 description='''
-Quantum Tools for Minecraft 26.1.2 NeoForge.
+Mechanica for Minecraft 26.1.2 NeoForge.
 Includes the Builder, Quarry tools, Constructor, schematic placement and
 material-management workflows.
 '''

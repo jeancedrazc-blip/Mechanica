@@ -1,9 +1,9 @@
 {
-  "itemGroup.rftoolsbuilder": "Quantum Tools",
-  "block.rftoolsbuilder.builder": "Builder",
+  "itemGroup.rftoolsbuilder": "Mechanica",
+  "block.rftoolsbuilder.builder": "Miner",
   "block.rftoolsbuilder.constructor": "Constructor",
   "block.rftoolsbuilder.schematic_table": "Schematic Table",
-  "item.rftoolsbuilder.builder": "Builder",
+  "item.rftoolsbuilder.builder": "Miner",
   "item.rftoolsbuilder.shape_card_def": "Shape Card",
   "item.rftoolsbuilder.shape_card_quarry": "Quarry Card",
   "item.rftoolsbuilder.shape_card_quarry_clear": "Clearing Quarry Card",

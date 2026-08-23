@@ -1,9 +1,9 @@
 {
-  "itemGroup.rftoolsbuilder": "Ferramentas Quânticas",
-  "block.rftoolsbuilder.builder": "Construtor",
+  "itemGroup.rftoolsbuilder": "Mechanica",
+  "block.rftoolsbuilder.builder": "Miner",
   "block.rftoolsbuilder.constructor": "Construtora",
   "block.rftoolsbuilder.schematic_table": "Mesa de Esquemas",
-  "item.rftoolsbuilder.builder": "Construtor",
+  "item.rftoolsbuilder.builder": "Miner",
   "item.rftoolsbuilder.shape_card_def": "Cartão de Forma",
   "item.rftoolsbuilder.shape_card_quarry": "Cartão de Pedreira",
   "item.rftoolsbuilder.shape_card_quarry_clear": "Cartão de Pedreira com Limpeza",

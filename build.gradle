@@ -7,7 +7,7 @@ version = mod_version
 group = mod_group_id
 
 base {
-    archivesName = 'QuantumTools'
+    archivesName = 'Mechanica'
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
