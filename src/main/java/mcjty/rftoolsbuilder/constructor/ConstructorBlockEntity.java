@@ -45,6 +45,11 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
     public static final int SHOT_COOLDOWN_TICKS = 4;
     public static final int TABLET_SCAN_TICKS = 24;
     public static final int MAX_TARGET_DISTANCE = 256;
+    public static final int DRONE_ENERGY_CAPACITY = 2_000;
+    public static final int DRONE_LOW_ENERGY_THRESHOLD = 400;
+    public static final int DRONE_RECHARGE_PER_TICK = 50;
+    public static final int DRONE_RECHARGE_FE_PER_TICK = 1;
+    public static final int DRONE_PLACEMENT_ENERGY = 6;
     public static final int SLOT_SCHEMATIC = 0;
     public static final int SLOT_TABLET_INPUT = 1;
     public static final int SLOT_TABLET_OUTPUT = 2;
@@ -77,6 +82,21 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
     private CompoundTag pendingJobData;
     private transient ConstructorEntitySupport.Prepared preparedEntity;
 
+    private int droneEnergy = DRONE_ENERGY_CAPACITY;
+    private boolean droneDeployed;
+    private boolean droneReturning;
+    private boolean droneRecharging;
+    private BlockPos dronePos;
+    private BlockPos flightStartPos;
+    private DroneReturnReason droneReturnReason = DroneReturnReason.NONE;
+
+    private enum DroneReturnReason {
+        NONE,
+        RECHARGE,
+        COMPLETE,
+        STOP
+    }
+
     private final ContainerData menuData = new ContainerData() {
         @Override public int get(int index) {
             return switch (index) {
@@ -85,7 +105,7 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
                 case 2 -> status.ordinal();
                 case 3 -> jobIndex();
                 case 4 -> jobTotal();
-                case 5 -> shotProgress;
+                case 5 -> droneReturning ? phaseTick : shotProgress;
                 case 6 -> running ? 1 : 0;
                 case 7 -> currentEnergyCost();
                 case 8 -> SchematicCardItem.hasSource(schematicCard()) && SchematicCardItem.deployed(schematicCard()) ? 1 : 0;
@@ -101,11 +121,15 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
                 case 18 -> tabletScanProgress;
                 case 19 -> speed.ordinal();
                 case 20 -> energyBlockProgress;
+                case 21 -> droneEnergy;
+                case 22 -> DRONE_ENERGY_CAPACITY;
+                case 23 -> droneDeployed ? 1 : 0;
+                case 24 -> droneReturning ? 1 : droneRecharging ? 2 : 0;
                 default -> 0;
             };
         }
         @Override public void set(int index, int value) {}
-        @Override public int getCount() { return 21; }
+        @Override public int getCount() { return 25; }
     };
 
     public ConstructorBlockEntity(BlockPos pos, BlockState state) {
@@ -137,6 +161,15 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
     public int flightTicks() { return Math.max(MIN_SCALED_FLIGHT_TICKS, flightTicks); }
     public boolean shotReserved() { return shotReserved; }
     public boolean isRunning() { return running; }
+    public int phaseTick() { return phaseTick; }
+    public int droneEnergy() { return droneEnergy; }
+    public int droneEnergyCapacity() { return DRONE_ENERGY_CAPACITY; }
+    public boolean droneDeployed() { return droneDeployed; }
+    public boolean droneReturning() { return droneReturning; }
+    public boolean droneRecharging() { return droneRecharging; }
+    public boolean droneLowEnergy() { return droneEnergy <= DRONE_LOW_ENERGY_THRESHOLD; }
+    public BlockPos dronePos() { return dronePos; }
+    public BlockPos flightStartPos() { return flightStartPos; }
     public ItemStack missingItem() { return missingItem; }
     public ContainerData menuData() { return menuData; }
     public ItemStack schematicCard() { return items.get(SLOT_SCHEMATIC); }
@@ -176,6 +209,13 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
             return true;
         }
         loadCurrentFromJob(false);
+        if (!droneDeployed && droneEnergy < DRONE_ENERGY_CAPACITY) {
+            droneRecharging = true;
+            droneReturnReason = DroneReturnReason.RECHARGE;
+            running = true;
+            status = ConstructorStatus.DRONE_RECHARGING;
+            setChangedAndSync();
+        }
         return status != ConstructorStatus.ERROR && status != ConstructorStatus.BLOCKED;
     }
 
@@ -266,14 +306,15 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
         targetIsEntity = true;
         preparedEntity = prepared;
         entityVisualStack = prepared.projectileStack();
-        if (!preserveReservedFlight || !shotReserved) resetTargetPhase();
+        if (!preserveReservedFlight || (!shotReserved && !droneReturning && !droneRecharging)) resetTargetPhase();
         else running = status != ConstructorStatus.PAUSED && status != ConstructorStatus.BLOCKED && status != ConstructorStatus.ERROR;
     }
 
     private void resetTargetPhase() {
         phaseTick = 0;
         shotProgress = 0;
-        flightTicks = targetPos == null ? MIN_FLIGHT_TICKS : ticksForDistance(targetPos);
+        flightStartPos = droneDeployed && dronePos != null ? dronePos.immutable() : worldPosition.immutable();
+        flightTicks = targetPos == null ? MIN_FLIGHT_TICKS : ticksForTravel(flightStartPos, targetPos);
         shotReserved = false;
         reservedPlacementStack = ItemStack.EMPTY;
         missingItem = ItemStack.EMPTY;
@@ -295,11 +336,15 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
 
         BlockPos nextPos = activeJob.currentWorldPos();
         BlockState nextState = ConstructorPlacementHelper.sanitizeState(activeJob.currentTargetState());
-        if (preserveReservedFlight && shotReserved) {
-            if (targetPos == null || !targetPos.equals(nextPos) || targetState == null || !targetState.equals(nextState) || targetIsEntity) {
+        if (preserveReservedFlight && (shotReserved || droneReturning || droneRecharging)) {
+            if (shotReserved && (targetPos == null || !targetPos.equals(nextPos) || targetState == null
+                    || !targetState.equals(nextState) || targetIsEntity)) {
                 failJob(ConstructorStatus.ERROR);
                 return;
             }
+            targetPos = nextPos;
+            targetState = nextState;
+            targetIsEntity = false;
             running = status != ConstructorStatus.PAUSED && status != ConstructorStatus.BLOCKED && status != ConstructorStatus.ERROR;
         } else prepareBlockTarget(nextPos, nextState);
     }
@@ -320,13 +365,16 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
         pauseAfterShot = false;
         if (targetPos != null && status != ConstructorStatus.COMPLETE && status != ConstructorStatus.ERROR) {
             running = true;
-            if (!shotReserved) status = ConstructorStatus.READY;
+            if (droneReturning) status = ConstructorStatus.DRONE_RETURNING;
+            else if (droneRecharging) status = ConstructorStatus.DRONE_RECHARGING;
+            else if (!shotReserved) status = ConstructorStatus.READY;
             setChangedAndSync();
         }
     }
 
     public boolean clearJob() {
         if (shotReserved || status == ConstructorStatus.FIRING) return false;
+        boolean returnDrone = droneDeployed;
         activeJob = null;
         pendingJobData = null;
         targetPos = null;
@@ -341,9 +389,13 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
         reservedPlacementStack = ItemStack.EMPTY;
         entityVisualStack = ItemStack.EMPTY;
         missingItem = ItemStack.EMPTY;
-        running = false;
-        status = ConstructorStatus.IDLE;
-        setChangedAndSync();
+        if (returnDrone) beginDroneReturn(DroneReturnReason.STOP);
+        else {
+            resetDroneAtDock();
+            running = false;
+            status = ConstructorStatus.IDLE;
+            setChangedAndSync();
+        }
         return true;
     }
 
@@ -517,7 +569,16 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
     private void serverTick(ServerLevel level) {
         tickMaterialTabletWriter();
         if (activeJob == null && pendingJobData != null) restorePendingJob();
-        if (!running || targetPos == null || (!targetIsEntity && targetState == null)) return;
+        if (!running) return;
+        if (droneReturning) {
+            tickDroneReturn();
+            return;
+        }
+        if (droneRecharging) {
+            tickDroneRecharge();
+            return;
+        }
+        if (targetPos == null || (!targetIsEntity && targetState == null)) return;
         if (shotCooldown > 0 && !shotReserved) { shotCooldown--; return; }
 
         if (!level.hasChunkAt(targetPos)) { transition(ConstructorStatus.WAITING_CHUNK); return; }
@@ -555,6 +616,56 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
             }
             default -> { }
         }
+    }
+
+    private void tickDroneReturn() {
+        if (++phaseTick < flightTicks()) {
+            if ((phaseTick & 1) == 0) syncClientState();
+            return;
+        }
+
+        DroneReturnReason arrivedFor = droneReturnReason;
+        resetDroneAtDock();
+        if (arrivedFor == DroneReturnReason.RECHARGE) {
+            droneReturnReason = DroneReturnReason.RECHARGE;
+            droneRecharging = true;
+            running = true;
+            status = ConstructorStatus.DRONE_RECHARGING;
+        } else if (arrivedFor == DroneReturnReason.COMPLETE) {
+            droneReturnReason = DroneReturnReason.NONE;
+            running = false;
+            status = ConstructorStatus.COMPLETE;
+        } else {
+            droneReturnReason = DroneReturnReason.NONE;
+            running = false;
+            status = ConstructorStatus.IDLE;
+        }
+        setChangedAndSync();
+    }
+
+    private void tickDroneRecharge() {
+        if (droneEnergy >= DRONE_ENERGY_CAPACITY) {
+            droneEnergy = DRONE_ENERGY_CAPACITY;
+            droneRecharging = false;
+            droneReturnReason = DroneReturnReason.NONE;
+            if (targetPos != null && (targetState != null || targetIsEntity)) resetTargetPhase();
+            else {
+                running = false;
+                status = ConstructorStatus.IDLE;
+                setChangedAndSync();
+            }
+            return;
+        }
+
+        if (energy.getEnergyStored() < DRONE_RECHARGE_FE_PER_TICK) {
+            transition(ConstructorStatus.WAITING_ENERGY);
+            return;
+        }
+
+        energy.consume(DRONE_RECHARGE_FE_PER_TICK);
+        droneEnergy = Math.min(DRONE_ENERGY_CAPACITY, droneEnergy + DRONE_RECHARGE_PER_TICK);
+        if (status != ConstructorStatus.DRONE_RECHARGING) status = ConstructorStatus.DRONE_RECHARGING;
+        if ((phaseTick++ & 1) == 0 || droneEnergy >= DRONE_ENERGY_CAPACITY) setChangedAndSync();
     }
 
     private void tickMaterialTabletWriter() {
@@ -708,6 +819,7 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
             reservedPlacementStack = ItemStack.EMPTY;
             if (!spawned) { failJob(ConstructorStatus.ERROR); return; }
             consumeCompletedPlacementEnergy();
+            completeDroneLeg();
             finishCurrentAndAdvance(flightTicks());
             return;
         }
@@ -724,6 +836,7 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
         reservedPlacementStack = ItemStack.EMPTY;
         if (!placed) { failJob(ConstructorStatus.ERROR); return; }
         consumeCompletedPlacementEnergy();
+        completeDroneLeg();
         finishCurrentAndAdvance(flightTicks());
     }
 
@@ -758,6 +871,8 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
                     running = false;
                     status = ConstructorStatus.PAUSED;
                     setChangedAndSync();
+                } else if (shouldRechargeBeforeNextTarget()) {
+                    beginDroneReturn(DroneReturnReason.RECHARGE);
                 }
                 return;
             }
@@ -766,8 +881,6 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
     }
 
     private void finishJob(int finishedShotProgress) {
-        status = ConstructorStatus.COMPLETE;
-        running = false;
         pauseAfterShot = false;
         phaseTick = 0;
         shotProgress = finishedShotProgress;
@@ -777,7 +890,12 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
         preparedEntity = null;
         entityVisualStack = ItemStack.EMPTY;
         missingItem = ItemStack.EMPTY;
-        setChangedAndSync();
+        if (droneDeployed) beginDroneReturn(DroneReturnReason.COMPLETE);
+        else {
+            status = ConstructorStatus.COMPLETE;
+            running = false;
+            setChangedAndSync();
+        }
     }
 
     private void failJob(ConstructorStatus failure) {
@@ -788,12 +906,77 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
         setChangedAndSync();
     }
 
+    private void completeDroneLeg() {
+        BlockPos start = flightStartPos == null ? worldPosition : flightStartPos;
+        int travel = droneTravelEnergy(start, targetPos);
+        droneEnergy = Math.max(0, droneEnergy - DRONE_PLACEMENT_ENERGY - travel);
+        droneDeployed = true;
+        droneReturning = false;
+        droneRecharging = false;
+        droneReturnReason = DroneReturnReason.NONE;
+        dronePos = targetPos == null ? start.immutable() : targetPos.immutable();
+        flightStartPos = dronePos;
+    }
+
+    private boolean shouldRechargeBeforeNextTarget() {
+        if (!droneDeployed || dronePos == null || targetPos == null) return false;
+        int nextLeg = droneTravelEnergy(dronePos, targetPos) + DRONE_PLACEMENT_ENERGY;
+        int returnLeg = droneTravelEnergy(targetPos, worldPosition);
+        return droneEnergy <= DRONE_LOW_ENERGY_THRESHOLD || droneEnergy < nextLeg + returnLeg;
+    }
+
+    private void beginDroneReturn(DroneReturnReason reason) {
+        if (!droneDeployed || dronePos == null) {
+            resetDroneAtDock();
+            droneReturnReason = reason;
+            if (reason == DroneReturnReason.RECHARGE) {
+                droneRecharging = true;
+                running = true;
+                status = ConstructorStatus.DRONE_RECHARGING;
+            } else {
+                running = false;
+                status = reason == DroneReturnReason.COMPLETE ? ConstructorStatus.COMPLETE : ConstructorStatus.IDLE;
+            }
+            setChangedAndSync();
+            return;
+        }
+
+        shotReserved = false;
+        reservedPlacementStack = ItemStack.EMPTY;
+        droneReturning = true;
+        droneRecharging = false;
+        droneReturnReason = reason;
+        flightStartPos = dronePos.immutable();
+        flightTicks = ticksForTravel(flightStartPos, worldPosition);
+        phaseTick = 0;
+        shotProgress = 0;
+        running = true;
+        status = ConstructorStatus.DRONE_RETURNING;
+        setChangedAndSync();
+    }
+
+    private void resetDroneAtDock() {
+        droneDeployed = false;
+        droneReturning = false;
+        droneRecharging = false;
+        dronePos = null;
+        flightStartPos = worldPosition.immutable();
+        phaseTick = 0;
+        shotProgress = 0;
+        flightTicks = MIN_FLIGHT_TICKS;
+    }
+
+    private int droneTravelEnergy(BlockPos from, BlockPos to) {
+        if (from == null || to == null) return 0;
+        return Math.max(1, (int) Math.ceil(Math.sqrt(from.distSqr(to)) * 3.0));
+    }
+
     private int energyCost(BlockPos target, boolean entity, boolean blockEntity) {
         return energyBlockProgress >= ENERGY_BLOCK_INTERVAL - 1 ? 1 : 0;
     }
 
-    private int ticksForDistance(BlockPos target) {
-        double distSqr = target.distSqr(worldPosition);
+    private int ticksForTravel(BlockPos from, BlockPos target) {
+        double distSqr = target.distSqr(from == null ? worldPosition : from);
         int normal = Math.max(MIN_FLIGHT_TICKS, (int) (Math.sqrt(Math.sqrt(distSqr)) * 4.0));
         return Math.max(MIN_SCALED_FLIGHT_TICKS, (normal + speed.multiplier() - 1) / speed.multiplier());
     }
@@ -850,7 +1033,14 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
         output.putInt("ShotProgress", shotProgress);
         output.putInt("FlightTicks", flightTicks);
         output.putInt("ShotCooldown", shotCooldown);
+        output.putInt("DroneEnergy", droneEnergy);
+        output.putBoolean("DroneDeployed", droneDeployed);
+        output.putBoolean("DroneReturning", droneReturning);
+        output.putBoolean("DroneRecharging", droneRecharging);
+        output.putInt("DroneReturnReason", droneReturnReason.ordinal());
         if (targetPos != null) output.putLong("TargetPos", targetPos.asLong());
+        if (dronePos != null) output.putLong("DronePos", dronePos.asLong());
+        if (flightStartPos != null) output.putLong("FlightStartPos", flightStartPos.asLong());
         if (targetState != null) output.store("TargetState", BlockState.CODEC, targetState);
         if (!schematicCard().isEmpty()) output.store("SchematicCard", ItemStack.CODEC, schematicCard());
         if (!tabletInput().isEmpty()) output.store("TabletInput", ItemStack.CODEC, tabletInput());
@@ -882,8 +1072,20 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
         shotProgress = Math.max(0, input.getIntOr("ShotProgress", 0));
         flightTicks = Math.max(MIN_SCALED_FLIGHT_TICKS, input.getIntOr("FlightTicks", MIN_FLIGHT_TICKS));
         shotCooldown = Math.max(0, input.getIntOr("ShotCooldown", 0));
+        droneEnergy = Math.max(0, Math.min(DRONE_ENERGY_CAPACITY,
+                input.getIntOr("DroneEnergy", DRONE_ENERGY_CAPACITY)));
+        droneDeployed = input.getBooleanOr("DroneDeployed", false);
+        droneReturning = input.getBooleanOr("DroneReturning", false);
+        droneRecharging = input.getBooleanOr("DroneRecharging", false);
+        int returnReason = input.getIntOr("DroneReturnReason", DroneReturnReason.NONE.ordinal());
+        droneReturnReason = DroneReturnReason.values()[Math.max(0,
+                Math.min(DroneReturnReason.values().length - 1, returnReason))];
         long packed = input.getLongOr("TargetPos", Long.MIN_VALUE);
         targetPos = packed == Long.MIN_VALUE ? null : BlockPos.of(packed);
+        long packedDrone = input.getLongOr("DronePos", Long.MIN_VALUE);
+        dronePos = packedDrone == Long.MIN_VALUE ? null : BlockPos.of(packedDrone);
+        long packedStart = input.getLongOr("FlightStartPos", Long.MIN_VALUE);
+        flightStartPos = packedStart == Long.MIN_VALUE ? worldPosition.immutable() : BlockPos.of(packedStart);
         targetState = input.read("TargetState", BlockState.CODEC).orElse(null);
         items.set(SLOT_SCHEMATIC, input.read("SchematicCard", ItemStack.CODEC).orElse(ItemStack.EMPTY));
         items.set(SLOT_TABLET_INPUT, input.read("TabletInput", ItemStack.CODEC).orElse(ItemStack.EMPTY));
@@ -895,7 +1097,13 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
         activeJob = null;
         preparedEntity = null;
 
-        if ((running || shotReserved) && pendingJobData == null) {
+        if ((droneDeployed || droneReturning) && dronePos == null) {
+            droneDeployed = false;
+            droneReturning = false;
+            if (droneReturnReason != DroneReturnReason.RECHARGE) droneReturnReason = DroneReturnReason.NONE;
+        }
+
+        if ((running || shotReserved) && pendingJobData == null && !droneReturning && !droneRecharging) {
             running = false;
             shotReserved = false;
             reservedPlacementStack = ItemStack.EMPTY;
@@ -906,6 +1114,7 @@ public final class ConstructorBlockEntity extends net.minecraft.world.level.bloc
             status = ConstructorStatus.ERROR;
             phaseTick = 0;
             shotProgress = 0;
+            resetDroneAtDock();
         }
     }
 

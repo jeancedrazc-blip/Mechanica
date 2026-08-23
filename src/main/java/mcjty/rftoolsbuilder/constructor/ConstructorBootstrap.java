@@ -73,6 +73,26 @@ public final class ConstructorBootstrap {
             Block::new,
             props -> props.noCollision().noOcclusion().strength(-1.0f, 3_600_000.0f).lightLevel(state -> 12)
     );
+    public static final DeferredBlock<Block> CONSTRUCTOR_DRONE_VISUAL = BLOCKS.registerBlock(
+            "constructor_drone_visual",
+            Block::new,
+            props -> props.noCollision().noOcclusion().strength(-1.0f, 3_600_000.0f)
+    );
+    public static final DeferredBlock<Block> CONSTRUCTOR_DRONE_ENERGY_VISUAL = BLOCKS.registerBlock(
+            "constructor_drone_energy_visual",
+            Block::new,
+            props -> props.noCollision().noOcclusion().strength(-1.0f, 3_600_000.0f).lightLevel(state -> 14)
+    );
+    public static final DeferredBlock<Block> CONSTRUCTOR_DRONE_LOW_VISUAL = BLOCKS.registerBlock(
+            "constructor_drone_low_visual",
+            Block::new,
+            props -> props.noCollision().noOcclusion().strength(-1.0f, 3_600_000.0f).lightLevel(state -> 12)
+    );
+    public static final DeferredBlock<Block> CONSTRUCTOR_SHUTTER_VISUAL = BLOCKS.registerBlock(
+            "constructor_shutter_visual",
+            Block::new,
+            props -> props.noCollision().noOcclusion().strength(-1.0f, 3_600_000.0f)
+    );
 
     public static final DeferredBlock<SchematicTableBlock> SCHEMATIC_TABLE = BLOCKS.registerBlock(
             "schematic_table",

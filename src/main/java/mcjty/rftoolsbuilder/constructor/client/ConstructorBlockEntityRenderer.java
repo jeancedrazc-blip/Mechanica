@@ -24,22 +24,26 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Renders one lightweight, non-colliding construction drone. The server only
+ * synchronizes its current leg and target; interpolation, shutters, beam and
+ * voxel assembly are client-side visuals and never decide placement outcome.
+ */
 public final class ConstructorBlockEntityRenderer implements BlockEntityRenderer<ConstructorBlockEntity, ConstructorRenderState> {
     private static final int FULL_BRIGHT = 0x00F000F0;
     private static final BlockDisplayContext DISPLAY_CONTEXT = BlockDisplayContext.create();
-
-    private static final double PIVOT_X = 0.5;
-    // 21.5 model pixels: the centre of the rebuilt CT-01 cannon trunnion.
-    private static final double PIVOT_Y = 1.34375;
-    private static final double PIVOT_Z = 0.5;
-    private static final double MUZZLE_DISTANCE = 1.495;
+    private static final double DOCK_X = 0.5;
+    private static final double DOCK_Y = 1.0625;
+    private static final double DOCK_Z = 0.5;
+    private static final double WORK_Y_OFFSET = 1.35;
+    private static final float TRAVEL_PORTION = 0.58f;
 
     private final BlockModelResolver blockResolver;
     private final ItemModelResolver itemResolver;
 
     public ConstructorBlockEntityRenderer(BlockEntityRendererProvider.Context context) {
-        this.blockResolver = context.blockModelResolver();
-        this.itemResolver = context.itemModelResolver();
+        blockResolver = context.blockModelResolver();
+        itemResolver = context.itemModelResolver();
     }
 
     @Override
@@ -49,18 +53,29 @@ public final class ConstructorBlockEntityRenderer implements BlockEntityRenderer
 
     @Override
     public AABB getRenderBoundingBox(ConstructorBlockEntity blockEntity) {
-        // Keep normal frustum culling, but describe the real swept volume of
-        // the long cannon so it is not clipped at the edge of the screen.
-        BlockPos pos = blockEntity.getBlockPos();
-        return new AABB(
-                pos.getX() - 1.25, pos.getY(), pos.getZ() - 1.25,
-                pos.getX() + 2.25, pos.getY() + 2.0, pos.getZ() + 2.25
-        );
+        BlockPos origin = blockEntity.getBlockPos();
+        double minX = origin.getX() - 1.0;
+        double minY = origin.getY() - 1.0;
+        double minZ = origin.getZ() - 1.0;
+        double maxX = origin.getX() + 2.0;
+        double maxY = origin.getY() + 3.0;
+        double maxZ = origin.getZ() + 2.0;
+        BlockPos[] movingPoints = {blockEntity.targetPos(), blockEntity.dronePos(), blockEntity.flightStartPos()};
+        for (BlockPos point : movingPoints) {
+            if (point == null) continue;
+            minX = Math.min(minX, point.getX() - 1.5);
+            minY = Math.min(minY, point.getY() - 1.0);
+            minZ = Math.min(minZ, point.getZ() - 1.5);
+            maxX = Math.max(maxX, point.getX() + 2.5);
+            maxY = Math.max(maxY, point.getY() + 3.0);
+            maxZ = Math.max(maxZ, point.getZ() + 2.5);
+        }
+        return new AABB(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     @Override
     public int getViewDistance() {
-        return 48;
+        return ConstructorBlockEntity.MAX_TARGET_DISTANCE;
     }
 
     @Override
@@ -73,9 +88,10 @@ public final class ConstructorBlockEntityRenderer implements BlockEntityRenderer
     ) {
         BlockEntityRenderer.super.extractRenderState(blockEntity, state, partialTick, cameraPosition, crumblingOverlay);
 
-        blockResolver.update(state.turret, ConstructorBootstrap.CONSTRUCTOR_TURRET_VISUAL.get().defaultBlockState(), DISPLAY_CONTEXT);
-        blockResolver.update(state.barrel, ConstructorBootstrap.CONSTRUCTOR_BARREL_VISUAL.get().defaultBlockState(), DISPLAY_CONTEXT);
-        blockResolver.update(state.energyChannel, ConstructorBootstrap.CONSTRUCTOR_ENERGY_VISUAL.get().defaultBlockState(), DISPLAY_CONTEXT);
+        blockResolver.update(state.drone, ConstructorBootstrap.CONSTRUCTOR_DRONE_VISUAL.get().defaultBlockState(), DISPLAY_CONTEXT);
+        blockResolver.update(state.droneEnergy, ConstructorBootstrap.CONSTRUCTOR_DRONE_ENERGY_VISUAL.get().defaultBlockState(), DISPLAY_CONTEXT);
+        blockResolver.update(state.droneLowEnergy, ConstructorBootstrap.CONSTRUCTOR_DRONE_LOW_VISUAL.get().defaultBlockState(), DISPLAY_CONTEXT);
+        blockResolver.update(state.shutter, ConstructorBootstrap.CONSTRUCTOR_SHUTTER_VISUAL.get().defaultBlockState(), DISPLAY_CONTEXT);
         blockResolver.update(state.beam, ConstructorBootstrap.CONSTRUCTOR_BEAM_VISUAL.get().defaultBlockState(), DISPLAY_CONTEXT);
         blockResolver.update(state.ring, ConstructorBootstrap.CONSTRUCTOR_RING_VISUAL.get().defaultBlockState(), DISPLAY_CONTEXT);
         blockResolver.update(state.targetFrame, ConstructorBootstrap.CONSTRUCTOR_TARGET_FRAME_VISUAL.get().defaultBlockState(), DISPLAY_CONTEXT);
@@ -86,26 +102,27 @@ public final class ConstructorBlockEntityRenderer implements BlockEntityRenderer
         boolean entityTarget = blockEntity.targetIsEntity();
         state.status = blockEntity.status();
         state.hasTarget = target != null && (targetState != null || entityTarget);
+        state.droneVisible = true;
+        state.droneLow = blockEntity.droneLowEnergy();
+        state.returning = blockEntity.droneReturning();
+        state.recharging = blockEntity.droneRecharging();
+        state.constructing = false;
         state.projectileVisible = false;
-        state.projectileProgress = 0.0f;
         state.projectileIsItem = false;
-        state.recoil = 0.0f;
+        state.projectileProgress = 0.0f;
+        state.buildProgress = 0.0f;
+        state.flightProgress = 0.0f;
         state.entityProjectile.clear();
-
-        Direction facing = blockEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
-        float desiredYaw = homeYaw(facing);
-        float desiredPitch = 0.0f;
 
         double time = partialTick;
         if (blockEntity.getLevel() != null) time += blockEntity.getLevel().getGameTime();
         state.effectTime = (float) time;
 
-        if (!state.hasTarget && (state.status == ConstructorStatus.IDLE
-                || state.status == ConstructorStatus.COMPLETE
-                || state.status == ConstructorStatus.PAUSED)) {
-            desiredYaw += (float) Math.sin(time * 0.035) * 1.6f;
-            desiredPitch = (float) Math.sin(time * 0.045) * 0.7f;
-        }
+        Direction facing = blockEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
+        state.droneYaw = homeYaw(facing);
+        state.droneX = DOCK_X;
+        state.droneY = DOCK_Y;
+        state.droneZ = DOCK_Z;
 
         if (state.hasTarget) {
             if (targetState != null) {
@@ -124,193 +141,212 @@ public final class ConstructorBlockEntityRenderer implements BlockEntityRenderer
                     state.projectileIsItem = true;
                 }
             }
-
-            state.targetX = target.getX() - origin.getX() + 0.5;
-            state.targetY = target.getY() - origin.getY() + 0.5;
-            state.targetZ = target.getZ() - origin.getZ() + 0.5;
-
-            double dx = state.targetX - PIVOT_X;
-            double dy = state.targetY - PIVOT_Y;
-            double dz = state.targetZ - PIVOT_Z;
-            double horizontal = Math.sqrt(dx * dx + dz * dz);
-            desiredYaw = (float) Math.toDegrees(Math.atan2(dx, dz));
-            desiredPitch = (float) -Math.toDegrees(Math.atan2(dy, Math.max(1.0e-5, horizontal)));
+            state.targetX = relativeCenterX(target, origin);
+            state.targetY = relativeCenterY(target, origin);
+            state.targetZ = relativeCenterZ(target, origin);
         }
 
-        state.targetYaw = desiredYaw;
-        state.targetPitch = desiredPitch;
-
-        if (!state.initialized) {
-            state.displayYaw = desiredYaw;
-            state.displayPitch = desiredPitch;
-            state.initialized = true;
+        if (state.returning) {
+            float progress = clamp01((blockEntity.phaseTick() + partialTick) / (float) blockEntity.flightTicks());
+            state.flightProgress = smoothStep(progress);
+            BlockPos start = firstNonNull(blockEntity.flightStartPos(), blockEntity.dronePos(), origin);
+            double sx = relativeCenterX(start, origin);
+            double sy = workingY(start, origin);
+            double sz = relativeCenterZ(start, origin);
+            state.droneX = lerp(sx, DOCK_X, state.flightProgress);
+            state.droneY = lerp(sy, DOCK_Y, state.flightProgress) + flightArc(progress);
+            state.droneZ = lerp(sz, DOCK_Z, state.flightProgress);
+            state.droneYaw = movementYaw(DOCK_X - sx, DOCK_Z - sz, state.droneYaw);
+            state.shutterOpen = smoothStep(clamp01((progress - 0.58f) / 0.32f));
+        } else if (state.status == ConstructorStatus.FIRING && state.hasTarget) {
+            float raw = clamp01((blockEntity.shotProgress() + partialTick) / (float) blockEntity.flightTicks());
+            state.flightProgress = smoothStep(clamp01(raw / TRAVEL_PORTION));
+            state.buildProgress = smoothStep(clamp01((raw - TRAVEL_PORTION) / (1.0f - TRAVEL_PORTION)));
+            BlockPos start = firstNonNull(blockEntity.flightStartPos(), origin);
+            boolean launchedBefore = blockEntity.droneDeployed();
+            double sx = launchedBefore ? relativeCenterX(start, origin) : DOCK_X;
+            double sy = launchedBefore ? workingY(start, origin) : DOCK_Y;
+            double sz = launchedBefore ? relativeCenterZ(start, origin) : DOCK_Z;
+            double tx = relativeCenterX(target, origin);
+            double ty = workingY(target, origin);
+            double tz = relativeCenterZ(target, origin);
+            state.droneX = lerp(sx, tx, state.flightProgress);
+            state.droneY = lerp(sy, ty, state.flightProgress) + flightArc(clamp01(raw / TRAVEL_PORTION));
+            state.droneZ = lerp(sz, tz, state.flightProgress);
+            state.droneYaw = movementYaw(tx - sx, tz - sz, state.droneYaw);
+            state.constructing = raw >= TRAVEL_PORTION;
+            state.projectileProgress = state.buildProgress;
+            state.projectileVisible = state.constructing && (targetState != null || state.projectileIsItem);
+            state.shutterOpen = launchedBefore ? 0.0f : 1.0f - smoothStep(clamp01((raw - 0.12f) / 0.28f));
+        } else if (blockEntity.droneDeployed() && blockEntity.dronePos() != null) {
+            BlockPos parked = blockEntity.dronePos();
+            state.droneX = relativeCenterX(parked, origin);
+            state.droneY = workingY(parked, origin) + Math.sin(time * 0.14) * 0.025;
+            state.droneZ = relativeCenterZ(parked, origin);
+            state.shutterOpen = 0.0f;
         } else {
-            float yawFactor = state.status == ConstructorStatus.AIMING ? 0.34f : 0.18f;
-            float pitchFactor = state.status == ConstructorStatus.AIMING ? 0.30f : 0.16f;
-            state.displayYaw = approachAngle(state.displayYaw, desiredYaw, yawFactor);
-            state.displayPitch += (desiredPitch - state.displayPitch) * pitchFactor;
+            state.shutterOpen = state.recharging ? 0.72f : 0.36f;
         }
 
-        if (state.status == ConstructorStatus.CHARGING) {
-            state.energyPulse = 1.02f + (float) ((Math.sin(time * 1.75) + 1.0) * 0.045);
-        } else if (state.status == ConstructorStatus.FIRING) {
+        if (state.status == ConstructorStatus.CHARGING || state.recharging) {
+            state.energyPulse = 1.03f + (float) ((Math.sin(time * 1.35) + 1.0) * 0.035);
+        } else if (state.constructing) {
             state.energyPulse = 1.10f;
-        } else if (state.status == ConstructorStatus.WAITING_ENERGY) {
-            state.energyPulse = 0.94f + (float) ((Math.sin(time * 0.35) + 1.0) * 0.025);
         } else {
             state.energyPulse = 1.0f;
-        }
-
-        if (state.hasTarget && (state.status == ConstructorStatus.CHARGING
-                || state.status == ConstructorStatus.FIRING)) {
-            state.projectileVisible = targetState != null || state.projectileIsItem;
-            if (state.status == ConstructorStatus.FIRING) {
-                state.projectileProgress = clamp01((blockEntity.shotProgress() + partialTick)
-                        / (float) blockEntity.flightTicks());
-                state.recoil = 0.145f * (1.0f - smoothStep(state.projectileProgress));
-            } else {
-                // Show the locked path while the shot is charging. This is only
-                // reached after the server has validated energy, material,
-                // chunk, range and block support, so the preview cannot promise
-                // a placement that the authoritative machine already rejected.
-                state.projectileProgress = 0.0f;
-            }
         }
     }
 
     @Override
     public void submit(ConstructorRenderState state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState cameraState) {
-        submitTurret(state, poseStack, collector);
-        submitBarrel(state, poseStack, collector);
-        submitEnergy(state, poseStack, collector);
-        if (state.projectileVisible && state.hasTarget) submitConstructionEffect(state, poseStack, collector);
+        submitShutters(state, poseStack, collector);
+        if (state.droneVisible) submitDrone(state, poseStack, collector);
+        if (state.constructing && state.hasTarget) submitConstructionEffect(state, poseStack, collector);
     }
 
-    private static void submitTurret(ConstructorRenderState state, PoseStack poseStack, SubmitNodeCollector collector) {
-        poseStack.pushPose();
-        rotateAroundPivot(poseStack, state.displayYaw, 0.0f);
-        state.turret.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
-        poseStack.popPose();
+    private static void submitShutters(ConstructorRenderState state, PoseStack poseStack, SubmitNodeCollector collector) {
+        float open = smoothStep(state.shutterOpen);
+        for (int i = 0; i < 4; i++) {
+            poseStack.pushPose();
+            poseStack.translate(0.5, 0.0, 0.5);
+            poseStack.mulPose(Axis.YP.rotationDegrees(i * 90.0f));
+            poseStack.translate(0.0, open * 0.08, -open * 0.24);
+            poseStack.mulPose(Axis.XP.rotationDegrees(-open * 52.0f));
+            poseStack.translate(-0.5, 0.0, -0.5);
+            state.shutter.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            poseStack.popPose();
+        }
     }
 
-    private static void submitBarrel(ConstructorRenderState state, PoseStack poseStack, SubmitNodeCollector collector) {
+    private static void submitDrone(ConstructorRenderState state, PoseStack poseStack, SubmitNodeCollector collector) {
         poseStack.pushPose();
-        rotateAroundPivot(poseStack, state.displayYaw, state.displayPitch);
-        poseStack.translate(0.0, 0.0, -state.recoil);
-        state.barrel.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
-        poseStack.popPose();
-    }
+        poseStack.translate(state.droneX, state.droneY, state.droneZ);
+        poseStack.mulPose(Axis.YP.rotationDegrees(state.droneYaw));
+        poseStack.translate(-0.5, 0.0, -0.5);
+        state.drone.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
 
-    private static void submitEnergy(ConstructorRenderState state, PoseStack poseStack, SubmitNodeCollector collector) {
-        boolean active = isEnergyActive(state.status);
-        float pulse = active ? state.energyPulse : 1.0f;
-        int light = active ? FULL_BRIGHT : state.lightCoords;
-
-        poseStack.pushPose();
-        rotateAroundPivot(poseStack, state.displayYaw, state.displayPitch);
-        poseStack.translate(0.0, 0.0, -state.recoil);
-        poseStack.translate(PIVOT_X, PIVOT_Y, PIVOT_Z);
-        poseStack.scale(pulse, pulse, 1.0f);
-        poseStack.translate(-PIVOT_X, -PIVOT_Y, -PIVOT_Z);
-        state.energyChannel.submit(poseStack, collector, light, OverlayTexture.NO_OVERLAY, 0);
+        poseStack.translate(0.5, 0.25, 0.5);
+        poseStack.scale(state.energyPulse, state.energyPulse, state.energyPulse);
+        poseStack.translate(-0.5, -0.25, -0.5);
+        if (state.droneLow) {
+            state.droneLowEnergy.submit(poseStack, collector, FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
+        } else {
+            state.droneEnergy.submit(poseStack, collector, FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
+        }
         poseStack.popPose();
     }
 
     private static void submitConstructionEffect(ConstructorRenderState state, PoseStack poseStack, SubmitNodeCollector collector) {
-        double dx = state.targetX - PIVOT_X;
-        double dy = state.targetY - PIVOT_Y;
-        double dz = state.targetZ - PIVOT_Z;
-        double length = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        if (length < 1.0e-5) return;
-
-        double beamLength = Math.max(0.05, length - MUZZLE_DISTANCE);
-        submitBeam(state, poseStack, collector, beamLength);
+        double sourceX = state.droneX;
+        double sourceY = state.droneY + 0.015;
+        double sourceZ = state.droneZ;
+        submitBeamBetween(state, poseStack, collector, sourceX, sourceY, sourceZ,
+                state.targetX, state.targetY, state.targetZ);
         submitTargetFrame(state, poseStack, collector);
-        if (state.status == ConstructorStatus.FIRING) {
-            submitMaterializingTarget(state, poseStack, collector);
-        }
+        if (state.projectileVisible) submitMaterializingTarget(state, poseStack, collector);
     }
 
-    private static void submitBeam(ConstructorRenderState state, PoseStack poseStack,
-                                   SubmitNodeCollector collector, double beamLength) {
-        poseStack.pushPose();
-        poseStack.translate(PIVOT_X, PIVOT_Y, PIVOT_Z);
-        poseStack.mulPose(Axis.YP.rotationDegrees(state.targetYaw));
-        poseStack.mulPose(Axis.XP.rotationDegrees(state.targetPitch));
-        poseStack.translate(-0.5, -0.5, MUZZLE_DISTANCE);
+    private static void submitBeamBetween(ConstructorRenderState state, PoseStack poseStack,
+                                          SubmitNodeCollector collector,
+                                          double sourceX, double sourceY, double sourceZ,
+                                          double targetX, double targetY, double targetZ) {
+        double dx = targetX - sourceX;
+        double dy = targetY - sourceY;
+        double dz = targetZ - sourceZ;
+        double horizontal = Math.sqrt(dx * dx + dz * dz);
+        double length = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (length < 1.0e-5) return;
+        float yaw = (float) Math.toDegrees(Math.atan2(dx, dz));
+        float pitch = (float) -Math.toDegrees(Math.atan2(dy, Math.max(1.0e-5, horizontal)));
 
-        float flicker = 0.88f + 0.12f * (float) Math.sin(state.effectTime * 2.7f);
         poseStack.pushPose();
+        poseStack.translate(sourceX, sourceY, sourceZ);
+        poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
+        poseStack.mulPose(Axis.XP.rotationDegrees(pitch));
+        poseStack.translate(-0.5, -0.5, 0.0);
+        float flicker = 0.74f + 0.10f * (float) Math.sin(state.effectTime * 2.7f);
         poseStack.translate(0.5, 0.5, 0.0);
-        poseStack.scale(flicker, flicker, (float) beamLength);
+        poseStack.scale(flicker, flicker, (float) length);
         poseStack.translate(-0.5, -0.5, 0.0);
         state.beam.submit(poseStack, collector, FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
 
-        // Three square energy pulses travel along the beam. Their low-poly
-        // geometry keeps the effect firmly inside Minecraft's vanilla style.
         for (int i = 0; i < 3; i++) {
-            float travel = positiveModulo(state.effectTime * 0.085f + i / 3.0f, 1.0f);
-            float ringScale = 0.56f + 0.12f * (float) Math.sin((state.effectTime + i * 4.0f) * 0.45f);
+            float travel = positiveModulo(state.effectTime * 0.075f + i / 3.0f, 1.0f);
             poseStack.pushPose();
-            poseStack.translate(0.5, 0.5, beamLength * travel);
-            poseStack.mulPose(Axis.ZP.rotationDegrees(state.effectTime * 7.0f + i * 30.0f));
-            poseStack.scale(ringScale, ringScale, ringScale);
+            poseStack.translate(sourceX + dx * travel, sourceY + dy * travel, sourceZ + dz * travel);
+            poseStack.mulPose(Axis.YP.rotationDegrees(state.effectTime * 5.0f + i * 30.0f));
+            poseStack.scale(0.34f, 0.34f, 0.34f);
             poseStack.translate(-0.5, -0.5, -0.5);
             state.ring.submit(poseStack, collector, FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
             poseStack.popPose();
         }
-        poseStack.popPose();
     }
 
     private static void submitTargetFrame(ConstructorRenderState state, PoseStack poseStack,
                                           SubmitNodeCollector collector) {
-        float pulse = 1.0f + 0.018f * (float) Math.sin(state.effectTime * 0.65f);
+        float pulse = 1.0f + 0.025f * (float) Math.sin(state.effectTime * 0.8f);
         poseStack.pushPose();
         poseStack.translate(state.targetX, state.targetY, state.targetZ);
         poseStack.scale(pulse, pulse, pulse);
         poseStack.translate(-0.5, -0.5, -0.5);
         state.targetFrame.submit(poseStack, collector, FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
         poseStack.popPose();
+
+        // A square scan plane climbs through the target while the block fills
+        // from bottom to top, making the assembly order readable at a glance.
+        poseStack.pushPose();
+        poseStack.translate(state.targetX, state.targetY - 0.5 + state.buildProgress, state.targetZ);
+        poseStack.mulPose(Axis.YP.rotationDegrees(45.0f));
+        poseStack.scale(0.92f, 0.055f, 0.92f);
+        poseStack.translate(-0.5, -0.5, -0.5);
+        state.ring.submit(poseStack, collector, FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
+        poseStack.popPose();
     }
 
     private static void submitMaterializingTarget(ConstructorRenderState state, PoseStack poseStack,
                                                    SubmitNodeCollector collector) {
-        float growth = smoothStep(clamp01((state.projectileProgress - 0.10f) / 0.82f));
-        float scale = 0.06f + 0.94f * growth;
-
+        float growth = Math.max(0.04f, state.buildProgress);
         poseStack.pushPose();
-        poseStack.translate(state.targetX, state.targetY, state.targetZ);
-
         if (state.projectileIsItem) {
-            float itemScale = scale * 0.82f;
+            poseStack.translate(state.targetX, state.targetY, state.targetZ);
+            float itemScale = growth * 0.82f;
             poseStack.scale(itemScale, itemScale, itemScale);
             state.entityProjectile.submit(poseStack, collector, FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
         } else {
-            poseStack.scale(scale, scale, scale);
-            poseStack.translate(-0.5, -0.5, -0.5);
+            poseStack.translate(state.targetX - 0.5, state.targetY - 0.5, state.targetZ - 0.5);
+            poseStack.scale(1.0f, growth, 1.0f);
             state.projectile.submit(poseStack, collector, FULL_BRIGHT, OverlayTexture.NO_OVERLAY, 0);
         }
         poseStack.popPose();
     }
 
-    private static void rotateAroundPivot(PoseStack poseStack, float yaw, float pitch) {
-        poseStack.translate(PIVOT_X, PIVOT_Y, PIVOT_Z);
-        poseStack.mulPose(Axis.YP.rotationDegrees(yaw));
-        poseStack.mulPose(Axis.XP.rotationDegrees(pitch));
-        poseStack.translate(-PIVOT_X, -PIVOT_Y, -PIVOT_Z);
+    private static BlockPos firstNonNull(BlockPos first, BlockPos second) {
+        return first != null ? first : second;
     }
 
-    private static float approachAngle(float current, float target, float factor) {
-        float delta = wrapDegrees(target - current);
-        return current + delta * factor;
+    private static BlockPos firstNonNull(BlockPos first, BlockPos second, BlockPos third) {
+        return first != null ? first : second != null ? second : third;
     }
 
-    private static float wrapDegrees(float value) {
-        value %= 360.0f;
-        if (value <= -180.0f) value += 360.0f;
-        if (value > 180.0f) value -= 360.0f;
-        return value;
+    private static double relativeCenterX(BlockPos point, BlockPos origin) {
+        return point.getX() - origin.getX() + 0.5;
+    }
+
+    private static double relativeCenterY(BlockPos point, BlockPos origin) {
+        return point.getY() - origin.getY() + 0.5;
+    }
+
+    private static double relativeCenterZ(BlockPos point, BlockPos origin) {
+        return point.getZ() - origin.getZ() + 0.5;
+    }
+
+    private static double workingY(BlockPos point, BlockPos origin) {
+        return point.getY() - origin.getY() + WORK_Y_OFFSET;
+    }
+
+    private static float movementYaw(double dx, double dz, float fallback) {
+        return dx * dx + dz * dz < 1.0e-6 ? fallback : (float) Math.toDegrees(Math.atan2(dx, dz));
     }
 
     private static float homeYaw(Direction facing) {
@@ -323,18 +359,25 @@ public final class ConstructorBlockEntityRenderer implements BlockEntityRenderer
         };
     }
 
-    private static boolean isEnergyActive(ConstructorStatus status) {
-        return switch (status) {
-            case READY, AIMING, CHARGING, FIRING, WAITING_ENERGY, WAITING_MATERIAL, WAITING_CHUNK -> true;
-            default -> false;
-        };
+    private static double flightArc(float progress) {
+        return Math.sin(clamp01(progress) * Math.PI) * 0.22;
     }
 
-    private static float clamp01(float value) { return Math.max(0.0f, Math.min(1.0f, value)); }
-    private static float smoothStep(float value) { float t = clamp01(value); return t * t * (3.0f - 2.0f * t); }
+    private static double lerp(double start, double end, float progress) {
+        return start + (end - start) * progress;
+    }
+
+    private static float clamp01(float value) {
+        return Math.max(0.0f, Math.min(1.0f, value));
+    }
+
+    private static float smoothStep(float value) {
+        float t = clamp01(value);
+        return t * t * (3.0f - 2.0f * t);
+    }
+
     private static float positiveModulo(float value, float modulus) {
         float result = value % modulus;
         return result < 0.0f ? result + modulus : result;
     }
 }
-

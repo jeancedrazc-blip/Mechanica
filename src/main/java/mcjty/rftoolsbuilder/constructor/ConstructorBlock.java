@@ -36,9 +36,8 @@ public final class ConstructorBlock extends HorizontalDirectionalBlock implement
     public static final MapCodec<ConstructorBlock> CODEC = simpleCodec(ConstructorBlock::new);
 
     private static final VoxelShape CONSTRUCTOR_SHAPE = Shapes.or(
-            box(0, 0, 0, 16, 5, 16),
-            box(2.75, 5, 2.75, 13.25, 13.25, 13.25),
-            box(3.25, 13, 3.25, 12.75, 25.25, 12.75)
+            box(0, 0, 0, 16, 14.5, 16),
+            box(3.5, 14.5, 3.5, 12.5, 16, 12.5)
     );
 
     public ConstructorBlock(BlockBehaviour.Properties properties) {
@@ -152,4 +151,3 @@ public final class ConstructorBlock extends HorizontalDirectionalBlock implement
         }
     }
 }
-

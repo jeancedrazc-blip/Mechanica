@@ -12,5 +12,7 @@ public enum ConstructorStatus {
     PAUSED,
     BLOCKED,
     COMPLETE,
-    ERROR
+    ERROR,
+    DRONE_RETURNING,
+    DRONE_RECHARGING
 }

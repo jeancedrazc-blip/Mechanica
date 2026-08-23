@@ -133,7 +133,7 @@ public final class ConstructorScreen extends AbstractContainerScreen<Constructor
         }
         boolean modalOpen = configOpen || replacementOpen;
         boolean hasCard = menu.data().get(8) != 0;
-        boolean shotInFlight = state == ConstructorStatus.FIRING;
+        boolean shotInFlight = state == ConstructorStatus.FIRING || state == ConstructorStatus.DRONE_RETURNING;
         boolean hasJob = menu.data().get(4) > 0 || state != ConstructorStatus.IDLE;
 
         if (startButton != null) {
@@ -299,7 +299,10 @@ public final class ConstructorScreen extends AbstractContainerScreen<Constructor
 
         if (state == ConstructorStatus.FIRING) {
             int shotPct = Math.min(100, shot * 100 / flightTicks);
-            gui.text(font, Component.literal("PROJECTILE " + shotPct + "%"), x + 96, y + 130, QuantumUiTheme.GREEN, false);
+            gui.text(font, Component.literal("DRONE / BUILD " + shotPct + "%"), x + 96, y + 130, QuantumUiTheme.GREEN, false);
+        } else if (state == ConstructorStatus.DRONE_RETURNING) {
+            int returnPct = Math.min(100, shot * 100 / flightTicks);
+            gui.text(font, Component.literal("DRONE RETURN " + returnPct + "%"), x + 96, y + 130, QuantumUiTheme.AMBER, false);
         } else {
             int rules = replacementCount();
             gui.text(font, Component.literal(rules == 0 ? "no substitution rules" : rules + " substitution rule" + (rules == 1 ? "" : "s")),
@@ -320,8 +323,10 @@ public final class ConstructorScreen extends AbstractContainerScreen<Constructor
             gui.text(font, Component.literal("Z " + target.getZ()), x + 200, y + 76, QuantumUiTheme.TEXT, false);
         }
 
-        gui.text(font, Component.literal("ENERGY RATE"), x + 200, y + 92, QuantumUiTheme.MUTED, false);
-        gui.text(font, Component.literal("1 FE / 500"), x + 200, y + 104, QuantumUiTheme.CYAN, false);
+        gui.text(font, Component.literal("DRONE BATTERY"), x + 200, y + 92, QuantumUiTheme.MUTED, false);
+        gui.text(font, Component.literal(formatPercent(menu.data().get(21), menu.data().get(22))),
+                x + 200, y + 104, menu.data().get(21) <= ConstructorBlockEntity.DRONE_LOW_ENERGY_THRESHOLD
+                        ? QuantumUiTheme.AMBER : QuantumUiTheme.CYAN, false);
 
         if (state == ConstructorStatus.WAITING_MATERIAL) {
             gui.text(font, Component.literal("MISSING MATERIAL"), x + 200, y + 121, QuantumUiTheme.AMBER, false);
@@ -383,14 +388,16 @@ public final class ConstructorScreen extends AbstractContainerScreen<Constructor
             case BLOCKED -> "BLOCKED";
             case COMPLETE -> "COMPLETE";
             case ERROR -> "ERROR";
+            case DRONE_RETURNING -> "RETURNING";
+            case DRONE_RECHARGING -> "RECHARGING";
         };
     }
 
     private static int statusColor(ConstructorStatus status) {
         return switch (status) {
-            case AIMING, CHARGING, FIRING, READY -> QuantumUiTheme.CYAN;
+            case AIMING, CHARGING, FIRING, READY, DRONE_RECHARGING -> QuantumUiTheme.CYAN;
             case COMPLETE -> QuantumUiTheme.GREEN;
-            case WAITING_ENERGY, WAITING_MATERIAL, WAITING_CHUNK, PAUSED -> QuantumUiTheme.AMBER;
+            case WAITING_ENERGY, WAITING_MATERIAL, WAITING_CHUNK, PAUSED, DRONE_RETURNING -> QuantumUiTheme.AMBER;
             case BLOCKED, ERROR -> QuantumUiTheme.RED;
             default -> QuantumUiTheme.TEXT_SOFT;
         };
