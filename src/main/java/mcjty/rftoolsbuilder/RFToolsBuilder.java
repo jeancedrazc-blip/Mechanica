@@ -40,8 +40,15 @@ public final class RFToolsBuilder {
             "builder", BuilderBlock::new,
             properties -> properties.strength(3.5f, 8.0f).sound(SoundType.METAL));
 
+    public static final DeferredBlock<PhaseGlassBlock> PHASE_GLASS = BLOCKS.registerBlock(
+            "phase_glass", PhaseGlassBlock::new,
+            properties -> properties.strength(0.3f).sound(SoundType.GLASS).noOcclusion());
+
     public static final DeferredItem<BlockItem> BUILDER_ITEM = ITEMS.registerItem(
             "builder", properties -> new BlockItem(BUILDER.get(), properties));
+
+    public static final DeferredItem<BlockItem> PHASE_GLASS_ITEM = ITEMS.registerItem(
+            "phase_glass", properties -> new BlockItem(PHASE_GLASS.get(), properties));
 
     public static final DeferredItem<ShapeCardItem> SHAPE_CARD_DEF = ITEMS.registerItem(
             "shape_card_def", ShapeCardItem::new, properties -> properties.stacksTo(1));
@@ -68,6 +75,7 @@ public final class RFToolsBuilder {
                     .icon(() -> BUILDER_ITEM.get().getDefaultInstance())
                     .displayItems((parameters, output) -> {
                         output.accept(BUILDER_ITEM.get());
+                        output.accept(PHASE_GLASS_ITEM.get());
                         output.accept(SHAPE_CARD_DEF.get());
                         output.accept(SHAPE_CARD_QUARRY.get());
                         output.accept(SHAPE_CARD_QUARRY_CLEAR.get());

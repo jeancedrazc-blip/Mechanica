@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "rftoolsbuilder:block/phase_glass"
+    }
+  }
+}
