@@ -20,6 +20,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,9 +29,10 @@ public final class ConstructorBlockEntityRenderer implements BlockEntityRenderer
     private static final BlockDisplayContext DISPLAY_CONTEXT = BlockDisplayContext.create();
 
     private static final double PIVOT_X = 0.5;
-    private static final double PIVOT_Y = 0.96875;
+    // 21.5 model pixels: the centre of the rebuilt CT-01 cannon trunnion.
+    private static final double PIVOT_Y = 1.34375;
     private static final double PIVOT_Z = 0.5;
-    private static final double MUZZLE_DISTANCE = 1.50;
+    private static final double MUZZLE_DISTANCE = 1.495;
 
     private final BlockModelResolver blockResolver;
     private final ItemModelResolver itemResolver;
@@ -43,6 +45,22 @@ public final class ConstructorBlockEntityRenderer implements BlockEntityRenderer
     @Override
     public ConstructorRenderState createRenderState() {
         return new ConstructorRenderState();
+    }
+
+    @Override
+    public AABB getRenderBoundingBox(ConstructorBlockEntity blockEntity) {
+        // Keep normal frustum culling, but describe the real swept volume of
+        // the long cannon so it is not clipped at the edge of the screen.
+        BlockPos pos = blockEntity.getBlockPos();
+        return new AABB(
+                pos.getX() - 1.25, pos.getY(), pos.getZ() - 1.25,
+                pos.getX() + 2.25, pos.getY() + 2.0, pos.getZ() + 2.25
+        );
+    }
+
+    @Override
+    public int getViewDistance() {
+        return 48;
     }
 
     @Override
@@ -319,3 +337,4 @@ public final class ConstructorBlockEntityRenderer implements BlockEntityRenderer
         return result < 0.0f ? result + modulus : result;
     }
 }
+

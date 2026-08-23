@@ -10,6 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -20,6 +21,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -30,6 +34,12 @@ import java.util.List;
 
 public final class ConstructorBlock extends HorizontalDirectionalBlock implements EntityBlock {
     public static final MapCodec<ConstructorBlock> CODEC = simpleCodec(ConstructorBlock::new);
+
+    private static final VoxelShape CONSTRUCTOR_SHAPE = Shapes.or(
+            box(0, 0, 0, 16, 5, 16),
+            box(2.75, 5, 2.75, 13.25, 13.25, 13.25),
+            box(3.25, 13, 3.25, 12.75, 25.25, 12.75)
+    );
 
     public ConstructorBlock(BlockBehaviour.Properties properties) {
         super(properties);
@@ -53,6 +63,11 @@ public final class ConstructorBlock extends HorizontalDirectionalBlock implement
         return defaultBlockState()
                 .setValue(FACING, context.getHorizontalDirection().getOpposite())
                 .setValue(BlockStateProperties.LIT, false);
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return CONSTRUCTOR_SHAPE;
     }
 
     @Override
@@ -137,3 +152,4 @@ public final class ConstructorBlock extends HorizontalDirectionalBlock implement
         }
     }
 }
+

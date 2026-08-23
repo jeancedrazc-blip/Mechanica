@@ -1,641 +1,1334 @@
 {
-  "credit": "Quantum Tools Constructor - approved vanilla pivot",
+  "credit": "Mechanica Constructor CT-01 - rotating pedestal and pivot",
   "texture_size": [
-    64,
-    64
+    32,
+    32
   ],
   "textures": {
+    "white": "rftoolsbuilder:block/constructor_white",
+    "dark": "rftoolsbuilder:block/constructor_dark",
+    "metal": "rftoolsbuilder:block/constructor_metal",
+    "cyan": "rftoolsbuilder:block/constructor_cyan",
+    "vent": "rftoolsbuilder:block/constructor_vent",
     "base": "rftoolsbuilder:block/constructor_base",
     "pivot": "rftoolsbuilder:block/constructor_pivot",
     "arm": "rftoolsbuilder:block/constructor_arm",
     "projector": "rftoolsbuilder:block/constructor_projector",
     "energy": "rftoolsbuilder:block/constructor_energy",
-    "particle": "rftoolsbuilder:block/constructor_base"
+    "particle": "rftoolsbuilder:block/constructor_dark"
   },
   "elements": [
     {
       "name": "turntable",
       "from": [
-        3.5,
-        8.25,
-        3.5
+        2.75,
+        11.25,
+        2.75
       ],
       "to": [
-        12.5,
-        9.75,
-        12.5
+        13.25,
+        12.75,
+        13.25
       ],
       "faces": {
         "north": {
-          "texture": "#pivot",
           "uv": [
             0,
             0,
-            4,
-            4
-          ]
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "east": {
-          "texture": "#pivot",
           "uv": [
             0,
             0,
-            4,
-            4
-          ]
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "south": {
-          "texture": "#pivot",
           "uv": [
             0,
             0,
-            4,
-            4
-          ]
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "west": {
-          "texture": "#pivot",
           "uv": [
             0,
             0,
-            4,
-            4
-          ]
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "up": {
-          "texture": "#pivot",
           "uv": [
             0,
             0,
-            4,
-            4
-          ]
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "down": {
-          "texture": "#pivot",
           "uv": [
             0,
             0,
-            4,
-            4
-          ]
+            16,
+            16
+          ],
+          "texture": "#dark"
         }
       }
     },
     {
-      "name": "energy_ring",
-      "from": [
-        4.25,
-        9.7,
-        4.25
-      ],
-      "to": [
-        11.75,
-        10.3,
-        11.75
-      ],
-      "shade": false,
-      "faces": {
-        "north": {
-          "texture": "#pivot",
-          "uv": [
-            4,
-            0,
-            8,
-            4
-          ]
-        },
-        "east": {
-          "texture": "#pivot",
-          "uv": [
-            4,
-            0,
-            8,
-            4
-          ]
-        },
-        "south": {
-          "texture": "#pivot",
-          "uv": [
-            4,
-            0,
-            8,
-            4
-          ]
-        },
-        "west": {
-          "texture": "#pivot",
-          "uv": [
-            4,
-            0,
-            8,
-            4
-          ]
-        },
-        "up": {
-          "texture": "#pivot",
-          "uv": [
-            4,
-            0,
-            8,
-            4
-          ]
-        },
-        "down": {
-          "texture": "#pivot",
-          "uv": [
-            4,
-            0,
-            8,
-            4
-          ]
-        }
-      }
-    },
-    {
-      "name": "pivot_body",
-      "from": [
-        5,
-        10.2,
-        5
-      ],
-      "to": [
-        11,
-        15.5,
-        11
-      ],
-      "faces": {
-        "north": {
-          "texture": "#pivot",
-          "uv": [
-            8,
-            0,
-            12,
-            4
-          ]
-        },
-        "east": {
-          "texture": "#pivot",
-          "uv": [
-            8,
-            0,
-            12,
-            4
-          ]
-        },
-        "south": {
-          "texture": "#pivot",
-          "uv": [
-            8,
-            0,
-            12,
-            4
-          ]
-        },
-        "west": {
-          "texture": "#pivot",
-          "uv": [
-            8,
-            0,
-            12,
-            4
-          ]
-        },
-        "up": {
-          "texture": "#pivot",
-          "uv": [
-            8,
-            0,
-            12,
-            4
-          ]
-        },
-        "down": {
-          "texture": "#pivot",
-          "uv": [
-            8,
-            0,
-            12,
-            4
-          ]
-        }
-      }
-    },
-    {
-      "name": "left_support",
+      "name": "turntable_energy_ring",
       "from": [
         3.25,
-        11,
-        5
-      ],
-      "to": [
-        5.25,
-        16.5,
-        11
-      ],
-      "faces": {
-        "north": {
-          "texture": "#pivot",
-          "uv": [
-            12,
-            0,
-            16,
-            4
-          ]
-        },
-        "east": {
-          "texture": "#pivot",
-          "uv": [
-            12,
-            0,
-            16,
-            4
-          ]
-        },
-        "south": {
-          "texture": "#pivot",
-          "uv": [
-            12,
-            0,
-            16,
-            4
-          ]
-        },
-        "west": {
-          "texture": "#pivot",
-          "uv": [
-            12,
-            0,
-            16,
-            4
-          ]
-        },
-        "up": {
-          "texture": "#pivot",
-          "uv": [
-            12,
-            0,
-            16,
-            4
-          ]
-        },
-        "down": {
-          "texture": "#pivot",
-          "uv": [
-            12,
-            0,
-            16,
-            4
-          ]
-        }
-      }
-    },
-    {
-      "name": "right_support",
-      "from": [
-        10.75,
-        11,
-        5
+        12.55,
+        3.25
       ],
       "to": [
         12.75,
-        16.5,
+        13.25,
+        12.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        }
+      }
+    },
+    {
+      "name": "pedestal_lower",
+      "from": [
+        4,
+        13.1,
+        4
+      ],
+      "to": [
+        12,
+        15.75,
+        12
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        }
+      }
+    },
+    {
+      "name": "pedestal_mid",
+      "from": [
+        5,
+        15.5,
+        5
+      ],
+      "to": [
+        11,
+        18.75,
         11
       ],
       "faces": {
         "north": {
-          "texture": "#pivot",
           "uv": [
             0,
-            4,
-            4,
-            8
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "east": {
-          "texture": "#pivot",
           "uv": [
             0,
-            4,
-            4,
-            8
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "south": {
-          "texture": "#pivot",
           "uv": [
             0,
-            4,
-            4,
-            8
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "west": {
-          "texture": "#pivot",
           "uv": [
             0,
-            4,
-            4,
-            8
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "up": {
-          "texture": "#pivot",
           "uv": [
             0,
-            4,
-            4,
-            8
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "down": {
-          "texture": "#pivot",
           "uv": [
             0,
-            4,
-            4,
-            8
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         }
       }
     },
     {
-      "name": "left_pivot",
+      "name": "pedestal_neck",
+      "from": [
+        5.75,
+        18.5,
+        5.75
+      ],
+      "to": [
+        10.25,
+        20.75,
+        10.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        }
+      }
+    },
+    {
+      "name": "pedestal_front_plate",
+      "from": [
+        6,
+        15.9,
+        4.75
+      ],
+      "to": [
+        10,
+        18.15,
+        5.1
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        }
+      }
+    },
+    {
+      "name": "pedestal_back_plate",
+      "from": [
+        6,
+        15.9,
+        10.9
+      ],
+      "to": [
+        10,
+        18.15,
+        11.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        }
+      }
+    },
+    {
+      "name": "left_yoke",
       "from": [
         2.75,
-        12.5,
-        6
+        16.75,
+        5
       ],
       "to": [
-        4.25,
-        15.5,
-        10
+        5.5,
+        23.75,
+        11
       ],
       "faces": {
         "north": {
-          "texture": "#pivot",
           "uv": [
-            4,
-            4,
-            8,
-            8
-          ]
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "east": {
-          "texture": "#pivot",
           "uv": [
-            4,
-            4,
-            8,
-            8
-          ]
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "south": {
-          "texture": "#pivot",
           "uv": [
-            4,
-            4,
-            8,
-            8
-          ]
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "west": {
-          "texture": "#pivot",
           "uv": [
-            4,
-            4,
-            8,
-            8
-          ]
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "up": {
-          "texture": "#pivot",
           "uv": [
-            4,
-            4,
-            8,
-            8
-          ]
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "down": {
-          "texture": "#pivot",
           "uv": [
-            4,
-            4,
-            8,
-            8
-          ]
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         }
       }
     },
     {
-      "name": "right_pivot",
+      "name": "right_yoke",
       "from": [
-        11.75,
-        12.5,
-        6
+        10.5,
+        16.75,
+        5
       ],
       "to": [
         13.25,
-        15.5,
-        10
+        23.75,
+        11
       ],
       "faces": {
         "north": {
-          "texture": "#pivot",
           "uv": [
-            8,
-            4,
-            12,
-            8
-          ]
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "east": {
-          "texture": "#pivot",
           "uv": [
-            8,
-            4,
-            12,
-            8
-          ]
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "south": {
-          "texture": "#pivot",
           "uv": [
-            8,
-            4,
-            12,
-            8
-          ]
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "west": {
-          "texture": "#pivot",
           "uv": [
-            8,
-            4,
-            12,
-            8
-          ]
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "up": {
-          "texture": "#pivot",
           "uv": [
-            8,
-            4,
-            12,
-            8
-          ]
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         },
         "down": {
-          "texture": "#pivot",
           "uv": [
-            8,
-            4,
-            12,
-            8
-          ]
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         }
       }
     },
     {
-      "name": "pivot_core_left",
+      "name": "left_yoke_armor",
       "from": [
-        2.5,
-        13.25,
+        2.3,
+        18,
+        5.4
+      ],
+      "to": [
+        3.4,
+        23,
+        10.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        }
+      }
+    },
+    {
+      "name": "right_yoke_armor",
+      "from": [
+        12.6,
+        18,
+        5.4
+      ],
+      "to": [
+        13.7,
+        23,
+        10.6
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        }
+      }
+    },
+    {
+      "name": "left_pivot_outer",
+      "from": [
+        1.35,
+        18.75,
+        5.5
+      ],
+      "to": [
+        2.75,
+        23.25,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        }
+      }
+    },
+    {
+      "name": "left_pivot_inner",
+      "from": [
+        0.95,
+        19.5,
+        6.25
+      ],
+      "to": [
+        1.45,
+        22.5,
+        9.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        }
+      }
+    },
+    {
+      "name": "left_pivot_core",
+      "from": [
+        0.7,
+        20.15,
         7
       ],
       "to": [
-        2.85,
-        14.75,
+        1.05,
+        21.85,
         9
       ],
-      "shade": false,
       "faces": {
         "north": {
-          "texture": "#pivot",
           "uv": [
-            12,
-            4,
+            0,
+            0,
             16,
-            8
-          ]
+            16
+          ],
+          "texture": "#cyan"
         },
         "east": {
-          "texture": "#pivot",
           "uv": [
-            12,
-            4,
+            0,
+            0,
             16,
-            8
-          ]
+            16
+          ],
+          "texture": "#cyan"
         },
         "south": {
-          "texture": "#pivot",
           "uv": [
-            12,
-            4,
+            0,
+            0,
             16,
-            8
-          ]
+            16
+          ],
+          "texture": "#cyan"
         },
         "west": {
-          "texture": "#pivot",
           "uv": [
-            12,
-            4,
+            0,
+            0,
             16,
-            8
-          ]
+            16
+          ],
+          "texture": "#cyan"
         },
         "up": {
-          "texture": "#pivot",
           "uv": [
-            12,
-            4,
+            0,
+            0,
             16,
-            8
-          ]
+            16
+          ],
+          "texture": "#cyan"
         },
         "down": {
-          "texture": "#pivot",
           "uv": [
-            12,
-            4,
+            0,
+            0,
             16,
-            8
-          ]
+            16
+          ],
+          "texture": "#cyan"
         }
       }
     },
     {
-      "name": "pivot_core_right",
+      "name": "right_pivot_outer",
       "from": [
-        13.15,
         13.25,
+        18.75,
+        5.5
+      ],
+      "to": [
+        14.65,
+        23.25,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#white"
+        }
+      }
+    },
+    {
+      "name": "right_pivot_inner",
+      "from": [
+        14.55,
+        19.5,
+        6.25
+      ],
+      "to": [
+        15.05,
+        22.5,
+        9.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        }
+      }
+    },
+    {
+      "name": "right_pivot_core",
+      "from": [
+        14.95,
+        20.15,
         7
       ],
       "to": [
-        13.5,
-        14.75,
+        15.3,
+        21.85,
         9
       ],
-      "shade": false,
       "faces": {
         "north": {
-          "texture": "#pivot",
           "uv": [
             0,
-            8,
-            4,
-            12
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "east": {
-          "texture": "#pivot",
           "uv": [
             0,
-            8,
-            4,
-            12
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "south": {
-          "texture": "#pivot",
           "uv": [
             0,
-            8,
-            4,
-            12
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "west": {
-          "texture": "#pivot",
           "uv": [
             0,
-            8,
-            4,
-            12
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "up": {
-          "texture": "#pivot",
           "uv": [
             0,
-            8,
-            4,
-            12
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "down": {
-          "texture": "#pivot",
           "uv": [
             0,
-            8,
-            4,
-            12
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        }
+      }
+    },
+    {
+      "name": "upper_yoke_bridge",
+      "from": [
+        3.75,
+        22.75,
+        5.25
+      ],
+      "to": [
+        12.25,
+        24.75,
+        10.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#metal"
+        }
+      }
+    },
+    {
+      "name": "upper_yoke_dark_cap",
+      "from": [
+        4.5,
+        24.25,
+        5.75
+      ],
+      "to": [
+        11.5,
+        25.25,
+        10.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#dark"
         }
       }
     }
   ]
 }
+

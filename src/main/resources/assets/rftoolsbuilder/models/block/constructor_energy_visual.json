@@ -1,367 +1,871 @@
 {
-  "credit": "Quantum Tools Constructor - restrained cyan energy channel",
+  "credit": "Mechanica Constructor CT-01 - emissive cyan channels",
   "texture_size": [
-    64,
-    64
+    32,
+    32
   ],
   "textures": {
+    "white": "rftoolsbuilder:block/constructor_white",
+    "dark": "rftoolsbuilder:block/constructor_dark",
+    "metal": "rftoolsbuilder:block/constructor_metal",
+    "cyan": "rftoolsbuilder:block/constructor_cyan",
+    "vent": "rftoolsbuilder:block/constructor_vent",
     "base": "rftoolsbuilder:block/constructor_base",
     "pivot": "rftoolsbuilder:block/constructor_pivot",
     "arm": "rftoolsbuilder:block/constructor_arm",
     "projector": "rftoolsbuilder:block/constructor_projector",
     "energy": "rftoolsbuilder:block/constructor_energy",
-    "particle": "rftoolsbuilder:block/constructor_base"
+    "particle": "rftoolsbuilder:block/constructor_dark"
   },
   "elements": [
     {
-      "name": "left_channel",
+      "name": "left_long_channel",
       "from": [
-        3.95,
-        14.25,
-        6
+        2.65,
+        22.1,
+        8.75
       ],
       "to": [
-        4.3,
-        16.5,
-        23
+        2.95,
+        23.5,
+        26.75
       ],
-      "shade": false,
       "faces": {
         "north": {
-          "texture": "#energy",
           "uv": [
             0,
             0,
-            4,
-            4
-          ]
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "east": {
-          "texture": "#energy",
           "uv": [
             0,
             0,
-            4,
-            4
-          ]
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "south": {
-          "texture": "#energy",
           "uv": [
             0,
             0,
-            4,
-            4
-          ]
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "west": {
-          "texture": "#energy",
           "uv": [
             0,
             0,
-            4,
-            4
-          ]
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "up": {
-          "texture": "#energy",
           "uv": [
             0,
             0,
-            4,
-            4
-          ]
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "down": {
-          "texture": "#energy",
           "uv": [
             0,
             0,
-            4,
-            4
-          ]
+            16,
+            16
+          ],
+          "texture": "#cyan"
         }
       }
     },
     {
-      "name": "right_channel",
+      "name": "right_long_channel",
       "from": [
-        11.7,
-        14.25,
-        6
+        13.05,
+        22.1,
+        8.75
       ],
       "to": [
-        12.05,
-        16.5,
-        23
+        13.35,
+        23.5,
+        26.75
       ],
-      "shade": false,
       "faces": {
         "north": {
-          "texture": "#energy",
           "uv": [
-            4,
             0,
-            8,
-            4
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "east": {
-          "texture": "#energy",
           "uv": [
-            4,
             0,
-            8,
-            4
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "south": {
-          "texture": "#energy",
           "uv": [
-            4,
             0,
-            8,
-            4
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "west": {
-          "texture": "#energy",
           "uv": [
-            4,
             0,
-            8,
-            4
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "up": {
-          "texture": "#energy",
           "uv": [
-            4,
             0,
-            8,
-            4
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "down": {
-          "texture": "#energy",
           "uv": [
-            4,
             0,
-            8,
-            4
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         }
       }
     },
     {
-      "name": "top_channel",
+      "name": "left_lower_channel",
       "from": [
-        6.25,
-        18.95,
-        7
+        2.7,
+        20.35,
+        10
       ],
       "to": [
-        9.75,
-        19.3,
-        23.5
+        3,
+        21.15,
+        24.5
       ],
-      "shade": false,
       "faces": {
         "north": {
-          "texture": "#energy",
           "uv": [
-            8,
             0,
-            12,
-            4
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "east": {
-          "texture": "#energy",
           "uv": [
-            8,
             0,
-            12,
-            4
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "south": {
-          "texture": "#energy",
           "uv": [
-            8,
             0,
-            12,
-            4
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "west": {
-          "texture": "#energy",
           "uv": [
-            8,
             0,
-            12,
-            4
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "up": {
-          "texture": "#energy",
           "uv": [
-            8,
             0,
-            12,
-            4
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "down": {
-          "texture": "#energy",
           "uv": [
-            8,
             0,
-            12,
-            4
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         }
       }
     },
     {
-      "name": "rear_core",
+      "name": "right_lower_channel",
       "from": [
-        6.5,
-        14,
-        -6.6
+        13,
+        20.35,
+        10
       ],
       "to": [
-        9.5,
-        16,
-        -6.25
+        13.3,
+        21.15,
+        24.5
       ],
-      "shade": false,
       "faces": {
         "north": {
-          "texture": "#energy",
           "uv": [
-            12,
+            0,
             0,
             16,
-            4
-          ]
+            16
+          ],
+          "texture": "#cyan"
         },
         "east": {
-          "texture": "#energy",
           "uv": [
-            12,
+            0,
             0,
             16,
-            4
-          ]
+            16
+          ],
+          "texture": "#cyan"
         },
         "south": {
-          "texture": "#energy",
           "uv": [
-            12,
+            0,
             0,
             16,
-            4
-          ]
+            16
+          ],
+          "texture": "#cyan"
         },
         "west": {
-          "texture": "#energy",
           "uv": [
-            12,
+            0,
             0,
             16,
-            4
-          ]
+            16
+          ],
+          "texture": "#cyan"
         },
         "up": {
-          "texture": "#energy",
           "uv": [
-            12,
+            0,
             0,
             16,
-            4
-          ]
+            16
+          ],
+          "texture": "#cyan"
         },
         "down": {
-          "texture": "#energy",
           "uv": [
-            12,
+            0,
             0,
             16,
-            4
-          ]
+            16
+          ],
+          "texture": "#cyan"
         }
       }
     },
     {
-      "name": "projector_core",
+      "name": "top_long_channel",
       "from": [
-        5.75,
-        13.65,
-        31.35
+        6.1,
+        28,
+        10
       ],
       "to": [
-        10.25,
-        17.1,
-        31.7
+        9.9,
+        28.32,
+        25.5
       ],
-      "shade": false,
       "faces": {
         "north": {
-          "texture": "#energy",
           "uv": [
             0,
-            4,
-            4,
-            8
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "east": {
-          "texture": "#energy",
           "uv": [
             0,
-            4,
-            4,
-            8
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "south": {
-          "texture": "#energy",
           "uv": [
             0,
-            4,
-            4,
-            8
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "west": {
-          "texture": "#energy",
           "uv": [
             0,
-            4,
-            4,
-            8
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "up": {
-          "texture": "#energy",
           "uv": [
             0,
-            4,
-            4,
-            8
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         },
         "down": {
-          "texture": "#energy",
           "uv": [
             0,
-            4,
-            4,
-            8
-          ]
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        }
+      }
+    },
+    {
+      "name": "left_diagonal_channel",
+      "from": [
+        2.55,
+        20.2,
+        2.25
+      ],
+      "to": [
+        2.9,
+        21.1,
+        7.25
+      ],
+      "rotation": {
+        "origin": [
+          2.7,
+          22.5,
+          4.75
+        ],
+        "axis": "x",
+        "angle": -22.5,
+        "rescale": true
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        }
+      }
+    },
+    {
+      "name": "right_diagonal_channel",
+      "from": [
+        13.1,
+        20.2,
+        2.25
+      ],
+      "to": [
+        13.45,
+        21.1,
+        7.25
+      ],
+      "rotation": {
+        "origin": [
+          13.3,
+          22.5,
+          4.75
+        ],
+        "axis": "x",
+        "angle": -22.5,
+        "rescale": true
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        }
+      }
+    },
+    {
+      "name": "rear_status_core",
+      "from": [
+        7,
+        22,
+        -7.92
+      ],
+      "to": [
+        9,
+        24,
+        -7.72
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        }
+      }
+    },
+    {
+      "name": "top_status_core",
+      "from": [
+        7.25,
+        28.18,
+        -2.75
+      ],
+      "to": [
+        8.75,
+        28.58,
+        -1.25
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        }
+      }
+    },
+    {
+      "name": "muzzle_energy_core",
+      "from": [
+        5.7,
+        21.25,
+        31.78
+      ],
+      "to": [
+        10.3,
+        24.75,
+        31.96
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        }
+      }
+    },
+    {
+      "name": "muzzle_energy_cross_h",
+      "from": [
+        4.75,
+        22.65,
+        31.72
+      ],
+      "to": [
+        11.25,
+        23.35,
+        31.94
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        }
+      }
+    },
+    {
+      "name": "muzzle_energy_cross_v",
+      "from": [
+        7.55,
+        20.3,
+        31.72
+      ],
+      "to": [
+        8.45,
+        25.7,
+        31.94
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#cyan"
         }
       }
     }
   ]
 }
+
