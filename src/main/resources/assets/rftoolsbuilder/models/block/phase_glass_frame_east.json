@@ -1,0 +1,162 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "rftoolsbuilder:block/phase_glass_frame",
+    "frame": "rftoolsbuilder:block/phase_glass_frame",
+    "cyan": "rftoolsbuilder:block/phase_glass_cyan"
+  },
+  "elements": [
+    {
+      "from": [
+        14.0,
+        0.0,
+        -0.02
+      ],
+      "to": [
+        16.0,
+        16.0,
+        0.18
+      ],
+      "faces": {
+        "north": {
+          "texture": "#frame",
+          "cullface": "north"
+        }
+      }
+    },
+    {
+      "from": [
+        14.65,
+        6.0,
+        -0.06
+      ],
+      "to": [
+        15.35,
+        10.0,
+        -0.02
+      ],
+      "faces": {
+        "north": {
+          "texture": "#cyan",
+          "cullface": "north"
+        }
+      },
+      "shade": false,
+      "light_emission": 11
+    },
+    {
+      "from": [
+        14.0,
+        0.0,
+        15.82
+      ],
+      "to": [
+        16.0,
+        16.0,
+        16.02
+      ],
+      "faces": {
+        "south": {
+          "texture": "#frame",
+          "cullface": "south"
+        }
+      }
+    },
+    {
+      "from": [
+        14.65,
+        6.0,
+        16.02
+      ],
+      "to": [
+        15.35,
+        10.0,
+        16.06
+      ],
+      "faces": {
+        "south": {
+          "texture": "#cyan",
+          "cullface": "south"
+        }
+      },
+      "shade": false,
+      "light_emission": 11
+    },
+    {
+      "from": [
+        14.0,
+        -0.02,
+        0.0
+      ],
+      "to": [
+        16.0,
+        0.18,
+        16.0
+      ],
+      "faces": {
+        "down": {
+          "texture": "#frame",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        14.65,
+        -0.06,
+        6.0
+      ],
+      "to": [
+        15.35,
+        -0.02,
+        10.0
+      ],
+      "faces": {
+        "down": {
+          "texture": "#cyan",
+          "cullface": "down"
+        }
+      },
+      "shade": false,
+      "light_emission": 11
+    },
+    {
+      "from": [
+        14.0,
+        15.82,
+        0.0
+      ],
+      "to": [
+        16.0,
+        16.02,
+        16.0
+      ],
+      "faces": {
+        "up": {
+          "texture": "#frame",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "from": [
+        14.65,
+        16.02,
+        6.0
+      ],
+      "to": [
+        15.35,
+        16.06,
+        10.0
+      ],
+      "faces": {
+        "up": {
+          "texture": "#cyan",
+          "cullface": "up"
+        }
+      },
+      "shade": false,
+      "light_emission": 11
+    }
+  ]
+}

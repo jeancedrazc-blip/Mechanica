@@ -1,7 +1,137 @@
 {
-  "variants": {
-    "": {
-      "model": "rftoolsbuilder:block/phase_glass"
+  "multipart": [
+    {
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_core"
+      }
+    },
+    {
+      "when": {
+        "north": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_frame_north"
+      }
+    },
+    {
+      "when": {
+        "south": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_frame_south"
+      }
+    },
+    {
+      "when": {
+        "west": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_frame_west"
+      }
+    },
+    {
+      "when": {
+        "east": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_frame_east"
+      }
+    },
+    {
+      "when": {
+        "down": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_frame_down"
+      }
+    },
+    {
+      "when": {
+        "up": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_frame_up"
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "down": "false",
+        "north": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_corner_west_down_north"
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "down": "false",
+        "south": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_corner_west_down_south"
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "up": "false",
+        "north": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_corner_west_up_north"
+      }
+    },
+    {
+      "when": {
+        "west": "false",
+        "up": "false",
+        "south": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_corner_west_up_south"
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "down": "false",
+        "north": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_corner_east_down_north"
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "down": "false",
+        "south": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_corner_east_down_south"
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "up": "false",
+        "north": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_corner_east_up_north"
+      }
+    },
+    {
+      "when": {
+        "east": "false",
+        "up": "false",
+        "south": "false"
+      },
+      "apply": {
+        "model": "rftoolsbuilder:block/phase_glass_corner_east_up_south"
+      }
     }
-  }
+  ]
 }

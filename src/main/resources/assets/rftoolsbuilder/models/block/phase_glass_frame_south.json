@@ -1,0 +1,162 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "rftoolsbuilder:block/phase_glass_frame",
+    "frame": "rftoolsbuilder:block/phase_glass_frame",
+    "cyan": "rftoolsbuilder:block/phase_glass_cyan"
+  },
+  "elements": [
+    {
+      "from": [
+        -0.02,
+        0.0,
+        14.0
+      ],
+      "to": [
+        0.18,
+        16.0,
+        16.0
+      ],
+      "faces": {
+        "west": {
+          "texture": "#frame",
+          "cullface": "west"
+        }
+      }
+    },
+    {
+      "from": [
+        -0.06,
+        6.0,
+        14.65
+      ],
+      "to": [
+        -0.02,
+        10.0,
+        15.35
+      ],
+      "faces": {
+        "west": {
+          "texture": "#cyan",
+          "cullface": "west"
+        }
+      },
+      "shade": false,
+      "light_emission": 11
+    },
+    {
+      "from": [
+        15.82,
+        0.0,
+        14.0
+      ],
+      "to": [
+        16.02,
+        16.0,
+        16.0
+      ],
+      "faces": {
+        "east": {
+          "texture": "#frame",
+          "cullface": "east"
+        }
+      }
+    },
+    {
+      "from": [
+        16.02,
+        6.0,
+        14.65
+      ],
+      "to": [
+        16.06,
+        10.0,
+        15.35
+      ],
+      "faces": {
+        "east": {
+          "texture": "#cyan",
+          "cullface": "east"
+        }
+      },
+      "shade": false,
+      "light_emission": 11
+    },
+    {
+      "from": [
+        0.0,
+        -0.02,
+        14.0
+      ],
+      "to": [
+        16.0,
+        0.18,
+        16.0
+      ],
+      "faces": {
+        "down": {
+          "texture": "#frame",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        6.0,
+        -0.06,
+        14.65
+      ],
+      "to": [
+        10.0,
+        -0.02,
+        15.35
+      ],
+      "faces": {
+        "down": {
+          "texture": "#cyan",
+          "cullface": "down"
+        }
+      },
+      "shade": false,
+      "light_emission": 11
+    },
+    {
+      "from": [
+        0.0,
+        15.82,
+        14.0
+      ],
+      "to": [
+        16.0,
+        16.02,
+        16.0
+      ],
+      "faces": {
+        "up": {
+          "texture": "#frame",
+          "cullface": "up"
+        }
+      }
+    },
+    {
+      "from": [
+        6.0,
+        16.02,
+        14.65
+      ],
+      "to": [
+        10.0,
+        16.06,
+        15.35
+      ],
+      "faces": {
+        "up": {
+          "texture": "#cyan",
+          "cullface": "up"
+        }
+      },
+      "shade": false,
+      "light_emission": 11
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "rftoolsbuilder:block/phase_glass_frame",
+    "frame": "rftoolsbuilder:block/phase_glass_frame",
+    "cyan": "rftoolsbuilder:block/phase_glass_cyan",
+    "core": "rftoolsbuilder:block/phase_glass_core"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "texture": "#core",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#core",
+          "cullface": "south"
+        },
+        "west": {
+          "texture": "#core",
+          "cullface": "west"
+        },
+        "east": {
+          "texture": "#core",
+          "cullface": "east"
+        },
+        "down": {
+          "texture": "#core",
+          "cullface": "down"
+        },
+        "up": {
+          "texture": "#core",
+          "cullface": "up"
+        }
+      }
+    }
+  ]
+}
