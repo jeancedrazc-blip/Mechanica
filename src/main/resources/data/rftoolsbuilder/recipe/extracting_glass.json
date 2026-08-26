@@ -1,0 +1,7 @@
+{
+  "type": "rftoolsbuilder:extracting",
+  "sample": "minecraft:sand",
+  "catalyst": "minecraft:lava_bucket",
+  "result": {"id": "minecraft:glass", "count": 1},
+  "ticks": 160
+}

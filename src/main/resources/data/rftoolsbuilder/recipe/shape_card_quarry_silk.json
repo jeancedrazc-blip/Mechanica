@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": ["rftoolsbuilder:shape_card_quarry", "minecraft:amethyst_shard", "minecraft:slime_ball"],
+  "result": {"id": "rftoolsbuilder:shape_card_quarry_silk", "count": 1}
+}

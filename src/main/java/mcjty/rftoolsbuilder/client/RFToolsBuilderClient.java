@@ -1,6 +1,7 @@
 package mcjty.rftoolsbuilder.client;
 
 import mcjty.rftoolsbuilder.RFToolsBuilder;
+import mcjty.rftoolsbuilder.extractor.client.ExtractorBlockEntityRenderer;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -21,5 +22,6 @@ public final class RFToolsBuilderClient {
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(RFToolsBuilder.BUILDER_BLOCK_ENTITY.get(), QuantumBuilderBlockEntityRenderer::new);
+        event.registerBlockEntityRenderer(RFToolsBuilder.EXTRACTOR_BLOCK_ENTITY.get(), ExtractorBlockEntityRenderer::new);
     }
 }

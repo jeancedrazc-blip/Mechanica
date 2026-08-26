@@ -1,12 +1,17 @@
 package mcjty.rftoolsbuilder;
 
 import mcjty.rftoolsbuilder.constructor.ConstructorBootstrap;
+import mcjty.rftoolsbuilder.extractor.ExtractorBlock;
+import mcjty.rftoolsbuilder.extractor.ExtractorBlockEntity;
+import mcjty.rftoolsbuilder.extractor.ExtractorRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -20,6 +25,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.transfer.item.VanillaContainerWrapper;
 
 /**
  * Complete Quantum Tools entry point. The legacy Builder/Quarry systems and the
@@ -35,6 +41,8 @@ public final class RFToolsBuilder {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MOD_ID);
     public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, MOD_ID);
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MOD_ID);
+    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, MOD_ID);
+    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, MOD_ID);
 
     public static final DeferredBlock<BuilderBlock> BUILDER = BLOCKS.registerBlock(
             "builder", BuilderBlock::new,
@@ -44,11 +52,19 @@ public final class RFToolsBuilder {
             "phase_glass", PhaseGlassBlock::new,
             properties -> properties.strength(0.3f).sound(SoundType.GLASS).noOcclusion());
 
+    public static final DeferredBlock<ExtractorBlock> EXTRACTOR = BLOCKS.registerBlock(
+            "extractor", ExtractorBlock::new,
+            properties -> properties.strength(3.5f, 8.0f).sound(SoundType.METAL).noOcclusion()
+                    .lightLevel(state -> state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT) ? 8 : 2));
+
     public static final DeferredItem<BlockItem> BUILDER_ITEM = ITEMS.registerItem(
             "builder", properties -> new BlockItem(BUILDER.get(), properties));
 
     public static final DeferredItem<BlockItem> PHASE_GLASS_ITEM = ITEMS.registerItem(
             "phase_glass", properties -> new BlockItem(PHASE_GLASS.get(), properties));
+
+    public static final DeferredItem<BlockItem> EXTRACTOR_ITEM = ITEMS.registerItem(
+            "extractor", properties -> new BlockItem(EXTRACTOR.get(), properties));
 
     public static final DeferredItem<ShapeCardItem> SHAPE_CARD_DEF = ITEMS.registerItem(
             "shape_card_def", ShapeCardItem::new, properties -> properties.stacksTo(1));
@@ -63,6 +79,15 @@ public final class RFToolsBuilder {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BuilderBlockEntity>> BUILDER_BLOCK_ENTITY =
             BLOCK_ENTITY_TYPES.register("builder", () -> new BlockEntityType<>(BuilderBlockEntity::new, false, BUILDER.get()));
 
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ExtractorBlockEntity>> EXTRACTOR_BLOCK_ENTITY =
+            BLOCK_ENTITY_TYPES.register("extractor", () -> new BlockEntityType<>(ExtractorBlockEntity::new, false, EXTRACTOR.get()));
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<ExtractorRecipe>> EXTRACTOR_RECIPE_TYPE =
+            RECIPE_TYPES.register("extracting", RecipeType::simple);
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ExtractorRecipe>> EXTRACTOR_RECIPE_SERIALIZER =
+            RECIPE_SERIALIZERS.register("extracting", () -> new RecipeSerializer<>(ExtractorRecipe.CODEC, ExtractorRecipe.STREAM_CODEC));
+
     public static final DeferredHolder<MenuType<?>, MenuType<BuilderMenu>> BUILDER_MENU =
             MENUS.register("builder", () -> IMenuTypeExtension.create(BuilderMenu::new));
 
@@ -75,6 +100,7 @@ public final class RFToolsBuilder {
                     .icon(() -> BUILDER_ITEM.get().getDefaultInstance())
                     .displayItems((parameters, output) -> {
                         output.accept(BUILDER_ITEM.get());
+                        output.accept(EXTRACTOR_ITEM.get());
                         output.accept(PHASE_GLASS_ITEM.get());
                         output.accept(SHAPE_CARD_DEF.get());
                         output.accept(SHAPE_CARD_QUARRY.get());
@@ -96,6 +122,8 @@ public final class RFToolsBuilder {
         BLOCK_ENTITY_TYPES.register(modBus);
         MENUS.register(modBus);
         TABS.register(modBus);
+        RECIPE_TYPES.register(modBus);
+        RECIPE_SERIALIZERS.register(modBus);
         modBus.addListener(this::registerCapabilities);
         modBus.addListener(this::registerPayloads);
 
@@ -111,5 +139,7 @@ public final class RFToolsBuilder {
     private void registerCapabilities(RegisterCapabilitiesEvent event) {
         event.registerBlockEntity(Capabilities.Energy.BLOCK, BUILDER_BLOCK_ENTITY.get(),
                 (builder, side) -> builder.energyStorage());
+        event.registerBlockEntity(Capabilities.Item.BLOCK, EXTRACTOR_BLOCK_ENTITY.get(),
+                (extractor, side) -> VanillaContainerWrapper.of(extractor));
     }
 }

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": ["IGI", "RCR", "IHI"],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "G": "minecraft:glass_pane",
+    "R": "minecraft:redstone",
+    "C": "minecraft:comparator",
+    "H": "minecraft:hopper"
+  },
+  "result": {"id": "rftoolsbuilder:extractor", "count": 1}
+}

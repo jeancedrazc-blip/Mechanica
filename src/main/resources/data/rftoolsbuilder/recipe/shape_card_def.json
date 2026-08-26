@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": ["IRI", "RPR", "IRI"],
+  "key": {
+    "I": "minecraft:iron_nugget",
+    "R": "minecraft:redstone",
+    "P": "minecraft:paper"
+  },
+  "result": {"id": "rftoolsbuilder:shape_card_def", "count": 1}
+}

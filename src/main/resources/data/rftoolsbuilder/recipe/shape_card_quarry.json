@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": ["rftoolsbuilder:shape_card_def", "minecraft:diamond_pickaxe"],
+  "result": {"id": "rftoolsbuilder:shape_card_quarry", "count": 1}
+}

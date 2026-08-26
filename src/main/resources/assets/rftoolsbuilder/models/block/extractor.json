@@ -1,0 +1,38 @@
+{
+  "credit": "Mechanica open-frame sci-fi Extractor",
+  "ambientocclusion": true,
+  "textures": {
+    "dark": "rftoolsbuilder:block/constructor_dark_v3",
+    "metal": "rftoolsbuilder:block/constructor_metal_v3",
+    "casing": "rftoolsbuilder:block/constructor_casing_v3",
+    "cyan": "rftoolsbuilder:block/constructor_cyan_v3",
+    "amber": "rftoolsbuilder:block/constructor_amber_v3",
+    "particle": "rftoolsbuilder:block/constructor_dark_v3"
+  },
+  "elements": [
+    {"from":[1,0,1],"to":[15,2,3],"faces":{"north":{"texture":"#dark"},"east":{"texture":"#metal"},"south":{"texture":"#metal"},"west":{"texture":"#metal"},"up":{"texture":"#casing"},"down":{"texture":"#dark"}}},
+    {"from":[1,0,13],"to":[15,2,15],"faces":{"north":{"texture":"#metal"},"east":{"texture":"#metal"},"south":{"texture":"#dark"},"west":{"texture":"#metal"},"up":{"texture":"#casing"},"down":{"texture":"#dark"}}},
+    {"from":[1,0,3],"to":[3,2,13],"faces":{"north":{"texture":"#metal"},"east":{"texture":"#casing"},"south":{"texture":"#metal"},"west":{"texture":"#dark"},"up":{"texture":"#casing"},"down":{"texture":"#dark"}}},
+    {"from":[13,0,3],"to":[15,2,13],"faces":{"north":{"texture":"#metal"},"east":{"texture":"#dark"},"south":{"texture":"#metal"},"west":{"texture":"#casing"},"up":{"texture":"#casing"},"down":{"texture":"#dark"}}},
+
+    {"from":[1,14,1],"to":[15,16,3],"faces":{"north":{"texture":"#dark"},"east":{"texture":"#metal"},"south":{"texture":"#metal"},"west":{"texture":"#metal"},"up":{"texture":"#casing"},"down":{"texture":"#dark"}}},
+    {"from":[1,14,13],"to":[15,16,15],"faces":{"north":{"texture":"#metal"},"east":{"texture":"#metal"},"south":{"texture":"#dark"},"west":{"texture":"#metal"},"up":{"texture":"#casing"},"down":{"texture":"#dark"}}},
+    {"from":[1,14,3],"to":[3,16,13],"faces":{"north":{"texture":"#metal"},"east":{"texture":"#casing"},"south":{"texture":"#metal"},"west":{"texture":"#dark"},"up":{"texture":"#casing"},"down":{"texture":"#dark"}}},
+    {"from":[13,14,3],"to":[15,16,13],"faces":{"north":{"texture":"#metal"},"east":{"texture":"#dark"},"south":{"texture":"#metal"},"west":{"texture":"#casing"},"up":{"texture":"#casing"},"down":{"texture":"#dark"}}},
+
+    {"from":[1,2,1],"to":[3,14,3],"faces":{"north":{"texture":"#dark"},"east":{"texture":"#metal"},"south":{"texture":"#metal"},"west":{"texture":"#dark"},"up":{"texture":"#amber"},"down":{"texture":"#dark"}}},
+    {"from":[13,2,1],"to":[15,14,3],"faces":{"north":{"texture":"#dark"},"east":{"texture":"#dark"},"south":{"texture":"#metal"},"west":{"texture":"#metal"},"up":{"texture":"#amber"},"down":{"texture":"#dark"}}},
+    {"from":[1,2,13],"to":[3,14,15],"faces":{"north":{"texture":"#metal"},"east":{"texture":"#metal"},"south":{"texture":"#dark"},"west":{"texture":"#dark"},"up":{"texture":"#amber"},"down":{"texture":"#dark"}}},
+    {"from":[13,2,13],"to":[15,14,15],"faces":{"north":{"texture":"#metal"},"east":{"texture":"#dark"},"south":{"texture":"#dark"},"west":{"texture":"#metal"},"up":{"texture":"#amber"},"down":{"texture":"#dark"}}},
+
+    {"from":[6.5,7,2.25],"to":[9.5,9,6.5],"faces":{"north":{"texture":"#dark"},"east":{"texture":"#metal"},"south":{"texture":"#cyan"},"west":{"texture":"#metal"},"up":{"texture":"#casing"},"down":{"texture":"#dark"}}},
+    {"from":[6.5,7,9.5],"to":[9.5,9,13.75],"faces":{"north":{"texture":"#cyan"},"east":{"texture":"#metal"},"south":{"texture":"#dark"},"west":{"texture":"#metal"},"up":{"texture":"#casing"},"down":{"texture":"#dark"}}},
+    {"from":[2.25,7,6.5],"to":[6.5,9,9.5],"faces":{"north":{"texture":"#metal"},"east":{"texture":"#cyan"},"south":{"texture":"#metal"},"west":{"texture":"#dark"},"up":{"texture":"#casing"},"down":{"texture":"#dark"}}},
+    {"from":[9.5,7,6.5],"to":[13.75,9,9.5],"faces":{"north":{"texture":"#metal"},"east":{"texture":"#dark"},"south":{"texture":"#metal"},"west":{"texture":"#cyan"},"up":{"texture":"#casing"},"down":{"texture":"#dark"}}},
+
+    {"from":[7,7.25,5.8],"to":[9,8.75,6.55],"shade":false,"faces":{"north":{"texture":"#cyan"},"east":{"texture":"#cyan"},"south":{"texture":"#cyan"},"west":{"texture":"#cyan"},"up":{"texture":"#cyan"},"down":{"texture":"#cyan"}}},
+    {"from":[7,7.25,9.45],"to":[9,8.75,10.2],"shade":false,"faces":{"north":{"texture":"#cyan"},"east":{"texture":"#cyan"},"south":{"texture":"#cyan"},"west":{"texture":"#cyan"},"up":{"texture":"#cyan"},"down":{"texture":"#cyan"}}},
+    {"from":[5.8,7.25,7],"to":[6.55,8.75,9],"shade":false,"faces":{"north":{"texture":"#cyan"},"east":{"texture":"#cyan"},"south":{"texture":"#cyan"},"west":{"texture":"#cyan"},"up":{"texture":"#cyan"},"down":{"texture":"#cyan"}}},
+    {"from":[9.45,7.25,7],"to":[10.2,8.75,9],"shade":false,"faces":{"north":{"texture":"#cyan"},"east":{"texture":"#cyan"},"south":{"texture":"#cyan"},"west":{"texture":"#cyan"},"up":{"texture":"#cyan"},"down":{"texture":"#cyan"}}}
+  ]
+}

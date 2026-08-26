@@ -1,0 +1,7 @@
+{
+  "type": "rftoolsbuilder:extracting",
+  "sample": "minecraft:netherrack",
+  "catalyst": "minecraft:lava_bucket",
+  "result": {"id": "minecraft:quartz", "count": 1},
+  "ticks": 200
+}

@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": ["rftoolsbuilder:shape_card_quarry", "minecraft:chest"],
+  "result": {"id": "rftoolsbuilder:shape_card_quarry_clear", "count": 1}
+}

@@ -1,0 +1,7 @@
+{
+  "type": "rftoolsbuilder:extracting",
+  "sample": "minecraft:calcite",
+  "catalyst": "minecraft:amethyst_block",
+  "result": {"id": "minecraft:amethyst_shard", "count": 1},
+  "ticks": 240
+}

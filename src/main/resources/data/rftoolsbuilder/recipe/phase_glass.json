@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": ["GEG", "EOE", "GEG"],
+  "key": {
+    "G": "minecraft:tinted_glass",
+    "E": "minecraft:ender_pearl",
+    "O": "minecraft:obsidian"
+  },
+  "result": {"id": "rftoolsbuilder:phase_glass", "count": 8}
+}

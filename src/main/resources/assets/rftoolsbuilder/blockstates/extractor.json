@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "lit=false": { "model": "rftoolsbuilder:block/extractor" },
+    "lit=true": { "model": "rftoolsbuilder:block/extractor" }
+  }
+}

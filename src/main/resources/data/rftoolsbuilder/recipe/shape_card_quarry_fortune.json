@@ -1,0 +1,6 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": ["rftoolsbuilder:shape_card_quarry", "minecraft:lapis_lazuli", "minecraft:gold_ingot"],
+  "result": {"id": "rftoolsbuilder:shape_card_quarry_fortune", "count": 1}
+}

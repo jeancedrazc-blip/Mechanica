@@ -1,0 +1,7 @@
+{
+  "type": "rftoolsbuilder:extracting",
+  "sample": "minecraft:cobblestone",
+  "catalyst": "minecraft:water_bucket",
+  "result": {"id": "minecraft:gravel", "count": 1},
+  "ticks": 120
+}

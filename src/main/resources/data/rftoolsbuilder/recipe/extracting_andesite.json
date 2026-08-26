@@ -1,0 +1,7 @@
+{
+  "type": "rftoolsbuilder:extracting",
+  "sample": "minecraft:stone",
+  "adjacent": ["minecraft:water_bucket", "minecraft:lava_bucket"],
+  "result": {"id": "minecraft:andesite", "count": 1},
+  "ticks": 80
+}
