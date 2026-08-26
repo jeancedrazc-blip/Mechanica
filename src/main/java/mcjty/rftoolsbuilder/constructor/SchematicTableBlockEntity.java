@@ -71,9 +71,8 @@ public final class SchematicTableBlockEntity extends BlockEntity implements Cont
 
     public static boolean isWritableInput(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
-        if (stack.getItem() instanceof SchematicCreatorCardItem) return true;
-        // Compatibility for blank cards created by builds before the orange
-        // creator card became a separate item.
+        // The orange card creates files in-world. Only a blank blue card is
+        // writable here and becomes the card inserted into the Constructor.
         return stack.getItem() instanceof SchematicCardItem && !SchematicCardItem.hasSource(stack);
     }
 

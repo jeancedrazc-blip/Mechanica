@@ -31,7 +31,7 @@ import net.neoforged.neoforge.transfer.ResourceHandler;
 import java.util.List;
 import java.util.Optional;
 
-/** Server-authoritative processing, inventory and synchronization for the Extractor. */
+/** Server-authoritative, zero-FE processing for the open-frame Extractor. */
 public final class ExtractorBlockEntity extends BlockEntity implements Container {
     public static final int STATUS_EMPTY = 0;
     public static final int STATUS_INVALID = 1;
@@ -150,6 +150,15 @@ public final class ExtractorBlockEntity extends BlockEntity implements Container
         return returned;
     }
 
+    /** Removes the complete buffered result so a player can collect it directly. */
+    public ItemStack ejectOutput() {
+        if (output.isEmpty()) return ItemStack.EMPTY;
+        ItemStack returned = output;
+        output = ItemStack.EMPTY;
+        markChangedAndSync();
+        return returned;
+    }
+
     public BlockState sampleState() {
         if (sample.getItem() instanceof BlockItem blockItem) return blockItem.getBlock().defaultBlockState();
         return null;
@@ -184,20 +193,26 @@ public final class ExtractorBlockEntity extends BlockEntity implements Container
         else output.grow(stack.getCount());
     }
 
+    /** Pushes to any adjacent inventory; no hidden top-only output side. */
     private void pushOutput() {
         if (!(level instanceof ServerLevel server) || output.isEmpty()) return;
-        BlockPos targetPos = worldPosition.above();
-        ResourceHandler<?> capability = server.getCapability(Capabilities.Item.BLOCK, targetPos, Direction.DOWN);
-        if (capability == null) return;
-        @SuppressWarnings("unchecked")
-        IItemHandler handler = IItemHandler.of((ResourceHandler) capability);
-        ItemStack remaining = output.copy();
-        for (int slot = 0; slot < handler.getSlots() && !remaining.isEmpty(); slot++) {
-            remaining = handler.insertItem(slot, remaining, false);
-        }
-        if (remaining.getCount() != output.getCount()) {
-            output = remaining;
-            markChangedAndSync();
+        for (Direction direction : Direction.values()) {
+            BlockPos targetPos = worldPosition.relative(direction);
+            ResourceHandler<?> capability = server.getCapability(
+                    Capabilities.Item.BLOCK, targetPos, direction.getOpposite());
+            if (capability == null) continue;
+
+            @SuppressWarnings("unchecked")
+            IItemHandler handler = IItemHandler.of((ResourceHandler) capability);
+            ItemStack remaining = output.copy();
+            for (int slot = 0; slot < handler.getSlots() && !remaining.isEmpty(); slot++) {
+                remaining = handler.insertItem(slot, remaining, false);
+            }
+            if (remaining.getCount() != output.getCount()) {
+                output = remaining;
+                markChangedAndSync();
+                if (output.isEmpty()) return;
+            }
         }
     }
 
@@ -250,7 +265,6 @@ public final class ExtractorBlockEntity extends BlockEntity implements Container
     @Override public net.minecraft.nbt.CompoundTag getUpdateTag(HolderLookup.Provider registries) { return saveWithoutMetadata(registries); }
     @Override public Packet<ClientGamePacketListener> getUpdatePacket() { return ClientboundBlockEntityDataPacket.create(this); }
 
-    // One output-only automation slot. The sample is controlled exclusively by player interaction.
     @Override public int getContainerSize() { return 1; }
     @Override public boolean isEmpty() { return output.isEmpty(); }
     @Override public ItemStack getItem(int slot) { return slot == 0 ? output : ItemStack.EMPTY; }

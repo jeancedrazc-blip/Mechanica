@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 
-/** Open-frame machine that holds and scans one visible sample block. */
+/** Open-frame machine that holds and continuously scans one visible sample block. */
 public final class ExtractorBlock extends Block implements EntityBlock {
     public static final MapCodec<ExtractorBlock> CODEC = simpleCodec(ExtractorBlock::new);
 
@@ -69,6 +69,7 @@ public final class ExtractorBlock extends Block implements EntityBlock {
         }
         if (!player.isCreative()) stack.shrink(1);
         player.sendSystemMessage(Component.translatable("message.rftoolsbuilder.extractor.inserted"));
+        player.sendSystemMessage(Component.translatable("message.rftoolsbuilder.extractor.configuration"));
         return InteractionResult.SUCCESS;
     }
 
@@ -85,7 +86,16 @@ public final class ExtractorBlock extends Block implements EntityBlock {
                 player.drop(returned, false);
             }
         } else {
-            player.sendSystemMessage(extractor.statusMessage());
+            ItemStack result = extractor.ejectOutput();
+            if (!result.isEmpty()) {
+                if (!player.addItem(result)) player.drop(result, false);
+                player.sendSystemMessage(Component.translatable("message.rftoolsbuilder.extractor.collected", result.getCount(), result.getHoverName()));
+            } else {
+                player.sendSystemMessage(extractor.statusMessage());
+                if (extractor.status() == ExtractorBlockEntity.STATUS_INVALID) {
+                    player.sendSystemMessage(Component.translatable("message.rftoolsbuilder.extractor.configuration"));
+                }
+            }
         }
         return InteractionResult.SUCCESS;
     }
