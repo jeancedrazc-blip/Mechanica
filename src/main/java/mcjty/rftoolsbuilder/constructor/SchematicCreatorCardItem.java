@@ -17,7 +17,8 @@ public final class SchematicCreatorCardItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display,
                                 Consumer<Component> text, TooltipFlag flag) {
-        text.accept(Component.literal("Insert into a Schematic Table"));
-        text.accept(Component.literal("Creates a written Schematic Card from a local file"));
+        text.accept(Component.translatable("tooltip.rftoolsbuilder.schematic_creator_card.table"));
+        text.accept(Component.translatable("tooltip.rftoolsbuilder.schematic_creator_card.folder"));
+        text.accept(Component.translatable("tooltip.rftoolsbuilder.schematic_creator_card.formats"));
     }
 }

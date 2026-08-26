@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IRI",
+    "PBP",
+    "III"
+  ],
+  "key": {
+    "I": "minecraft:iron_nugget",
+    "R": "minecraft:redstone",
+    "P": "minecraft:paper",
+    "B": "minecraft:blue_dye"
+  },
+  "result": {
+    "id": "rftoolsbuilder:schematic_card",
+    "count": 1
+  }
+}

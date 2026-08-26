@@ -50,7 +50,9 @@ public final class RFToolsBuilder {
 
     public static final DeferredBlock<PhaseGlassBlock> PHASE_GLASS = BLOCKS.registerBlock(
             "phase_glass", PhaseGlassBlock::new,
-            properties -> properties.strength(0.3f).sound(SoundType.GLASS).noOcclusion());
+            properties -> properties.strength(0.3f).sound(SoundType.GLASS).noOcclusion()
+                    .isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos) -> false));
 
     public static final DeferredBlock<ExtractorBlock> EXTRACTOR = BLOCKS.registerBlock(
             "extractor", ExtractorBlock::new,
