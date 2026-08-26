@@ -60,15 +60,15 @@ public final class ExtractorBlock extends Block implements EntityBlock {
         if (!(level.getBlockEntity(pos) instanceof ExtractorBlockEntity extractor)) return InteractionResult.PASS;
 
         if (blockItem.getBlock() instanceof EntityBlock) {
-            player.displayClientMessage(Component.translatable("message.rftoolsbuilder.extractor.unsafe_sample"), true);
+            player.sendSystemMessage(Component.translatable("message.rftoolsbuilder.extractor.unsafe_sample"));
             return InteractionResult.SUCCESS;
         }
         if (!extractor.insertSample(stack)) {
-            player.displayClientMessage(Component.translatable("message.rftoolsbuilder.extractor.occupied"), true);
+            player.sendSystemMessage(Component.translatable("message.rftoolsbuilder.extractor.occupied"));
             return InteractionResult.SUCCESS;
         }
         if (!player.isCreative()) stack.shrink(1);
-        player.displayClientMessage(Component.translatable("message.rftoolsbuilder.extractor.inserted"), true);
+        player.sendSystemMessage(Component.translatable("message.rftoolsbuilder.extractor.inserted"));
         return InteractionResult.SUCCESS;
     }
 
@@ -80,12 +80,12 @@ public final class ExtractorBlock extends Block implements EntityBlock {
         if (player.isShiftKeyDown()) {
             ItemStack returned = extractor.ejectSample();
             if (returned.isEmpty()) {
-                player.displayClientMessage(Component.translatable("message.rftoolsbuilder.extractor.empty"), true);
+                player.sendSystemMessage(Component.translatable("message.rftoolsbuilder.extractor.empty"));
             } else if (!player.addItem(returned)) {
                 player.drop(returned, false);
             }
         } else {
-            player.displayClientMessage(extractor.statusMessage(), true);
+            player.sendSystemMessage(extractor.statusMessage());
         }
         return InteractionResult.SUCCESS;
     }
