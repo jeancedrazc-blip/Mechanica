@@ -55,7 +55,7 @@ public final class SchematicCreatorCardItem extends Item {
         if (context.getPlayer().isShiftKeyDown()) {
             clearFirst(stack);
             context.getPlayer().sendSystemMessage(
-                    Component.translatable("message.rftoolsbuilder.schematic_creator.cancelled"), true);
+                    Component.translatable("message.rftoolsbuilder.schematic_creator.cancelled"));
             return InteractionResult.SUCCESS;
         }
 
@@ -66,7 +66,7 @@ public final class SchematicCreatorCardItem extends Item {
             tag.putLong(FIRST, clicked.asLong());
             saveRoot(stack, tag);
             context.getPlayer().sendSystemMessage(
-                    Component.translatable("message.rftoolsbuilder.schematic_creator.first", clicked.toShortString()), true);
+                    Component.translatable("message.rftoolsbuilder.schematic_creator.first", clicked.toShortString()));
             return InteractionResult.SUCCESS;
         }
 
