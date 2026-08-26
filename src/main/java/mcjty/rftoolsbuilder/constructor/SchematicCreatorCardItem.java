@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
@@ -53,7 +54,7 @@ public final class SchematicCreatorCardItem extends Item {
 
         if (context.getPlayer().isShiftKeyDown()) {
             clearFirst(stack);
-            context.getPlayer().displayClientMessage(
+            context.getPlayer().sendSystemMessage(
                     Component.translatable("message.rftoolsbuilder.schematic_creator.cancelled"), true);
             return InteractionResult.SUCCESS;
         }
@@ -64,7 +65,7 @@ public final class SchematicCreatorCardItem extends Item {
             tag.putBoolean(HAS_FIRST, true);
             tag.putLong(FIRST, clicked.asLong());
             saveRoot(stack, tag);
-            context.getPlayer().displayClientMessage(
+            context.getPlayer().sendSystemMessage(
                     Component.translatable("message.rftoolsbuilder.schematic_creator.first", clicked.toShortString()), true);
             return InteractionResult.SUCCESS;
         }
@@ -147,22 +148,7 @@ public final class SchematicCreatorCardItem extends Item {
     }
 
     private static CompoundTag writeBlockState(BlockState state) {
-        CompoundTag tag = new CompoundTag();
-        Identifier id = BuiltInRegistries.BLOCK.getKey(state.getBlock());
-        tag.putString("Name", id == null ? "minecraft:air" : id.toString());
-        if (!state.getValues().isEmpty()) {
-            CompoundTag properties = new CompoundTag();
-            for (Map.Entry<Property<?>, Comparable<?>> entry : state.getValues().entrySet()) {
-                properties.putString(entry.getKey().getName(), propertyName(entry.getKey(), entry.getValue()));
-            }
-            tag.put("Properties", properties);
-        }
-        return tag;
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static String propertyName(Property property, Comparable value) {
-        return property.getName(value);
+        return NbtUtils.writeBlockState(state);
     }
 
     private static ListTag intList(int x, int y, int z) {
