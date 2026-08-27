@@ -60,5 +60,11 @@
   "message.rftoolsbuilder.schematic_creator.saved": "Esquema salvo como %s (%s × %s × %s)",
   "message.rftoolsbuilder.schematic_creator.failed": "Não foi possível salvar o esquema: %s",
   "message.rftoolsbuilder.extractor.configuration": "Não usa FE. Centro = amostra; bloco abaixo = catalisador; as quatro laterais recebem água, lava ou outros blocos da receita.",
-  "message.rftoolsbuilder.extractor.collected": "Coletado: %s × %s"
+  "message.rftoolsbuilder.extractor.collected": "Coletado: %s × %s",
+  "block.rftoolsbuilder.ice_generator": "Gerador de Gelo",
+  "item.rftoolsbuilder.ice_generator": "Gerador de Gelo",
+  "message.rftoolsbuilder.ice_generator.ready": "Pronto · consome a fonte de água da frente e produz 2 gelos por segundo",
+  "message.rftoolsbuilder.ice_generator.no_water": "Não há fonte de água na entrada ciano (%s)",
+  "message.rftoolsbuilder.ice_generator.buffered": "Saída interna: %s gelos · clique com a mão vazia",
+  "message.rftoolsbuilder.ice_generator.collected": "Coletado: %s × %s"
 }

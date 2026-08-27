@@ -4,6 +4,8 @@ import mcjty.rftoolsbuilder.constructor.ConstructorBootstrap;
 import mcjty.rftoolsbuilder.extractor.ExtractorBlock;
 import mcjty.rftoolsbuilder.extractor.ExtractorBlockEntity;
 import mcjty.rftoolsbuilder.extractor.ExtractorRecipe;
+import mcjty.rftoolsbuilder.icegenerator.IceGeneratorBlock;
+import mcjty.rftoolsbuilder.icegenerator.IceGeneratorBlockEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.MenuType;
@@ -59,6 +61,10 @@ public final class RFToolsBuilder {
             properties -> properties.strength(3.5f, 8.0f).sound(SoundType.METAL).noOcclusion()
                     .lightLevel(state -> state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LIT) ? 8 : 2));
 
+    public static final DeferredBlock<IceGeneratorBlock> ICE_GENERATOR = BLOCKS.registerBlock(
+            "ice_generator", IceGeneratorBlock::new,
+            properties -> properties.strength(3.5f, 8.0f).sound(SoundType.METAL));
+
     public static final DeferredItem<BlockItem> BUILDER_ITEM = ITEMS.registerItem(
             "builder", properties -> new BlockItem(BUILDER.get(), properties));
 
@@ -67,6 +73,9 @@ public final class RFToolsBuilder {
 
     public static final DeferredItem<BlockItem> EXTRACTOR_ITEM = ITEMS.registerItem(
             "extractor", properties -> new BlockItem(EXTRACTOR.get(), properties));
+
+    public static final DeferredItem<BlockItem> ICE_GENERATOR_ITEM = ITEMS.registerItem(
+            "ice_generator", properties -> new BlockItem(ICE_GENERATOR.get(), properties));
 
     public static final DeferredItem<ShapeCardItem> SHAPE_CARD_DEF = ITEMS.registerItem(
             "shape_card_def", ShapeCardItem::new, properties -> properties.stacksTo(1));
@@ -83,6 +92,10 @@ public final class RFToolsBuilder {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ExtractorBlockEntity>> EXTRACTOR_BLOCK_ENTITY =
             BLOCK_ENTITY_TYPES.register("extractor", () -> new BlockEntityType<>(ExtractorBlockEntity::new, false, EXTRACTOR.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<IceGeneratorBlockEntity>> ICE_GENERATOR_BLOCK_ENTITY =
+            BLOCK_ENTITY_TYPES.register("ice_generator",
+                    () -> new BlockEntityType<>(IceGeneratorBlockEntity::new, false, ICE_GENERATOR.get()));
 
     public static final DeferredHolder<RecipeType<?>, RecipeType<ExtractorRecipe>> EXTRACTOR_RECIPE_TYPE =
             RECIPE_TYPES.register("extracting", RecipeType::simple);
@@ -103,6 +116,7 @@ public final class RFToolsBuilder {
                     .displayItems((parameters, output) -> {
                         output.accept(BUILDER_ITEM.get());
                         output.accept(EXTRACTOR_ITEM.get());
+                        output.accept(ICE_GENERATOR_ITEM.get());
                         output.accept(PHASE_GLASS_ITEM.get());
                         output.accept(SHAPE_CARD_DEF.get());
                         output.accept(SHAPE_CARD_QUARRY.get());
@@ -143,5 +157,7 @@ public final class RFToolsBuilder {
                 (builder, side) -> builder.energyStorage());
         event.registerBlockEntity(Capabilities.Item.BLOCK, EXTRACTOR_BLOCK_ENTITY.get(),
                 (extractor, side) -> VanillaContainerWrapper.of(extractor));
+        event.registerBlockEntity(Capabilities.Item.BLOCK, ICE_GENERATOR_BLOCK_ENTITY.get(),
+                (generator, side) -> VanillaContainerWrapper.of(generator));
     }
 }

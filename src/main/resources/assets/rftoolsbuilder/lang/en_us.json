@@ -60,5 +60,11 @@
   "message.rftoolsbuilder.schematic_creator.saved": "Schematic saved as %s (%s × %s × %s)",
   "message.rftoolsbuilder.schematic_creator.failed": "Could not save schematic: %s",
   "message.rftoolsbuilder.extractor.configuration": "No FE required. Center = sample; block below = catalyst; the four sides provide water, lava or other recipe blocks.",
-  "message.rftoolsbuilder.extractor.collected": "Collected %s × %s"
+  "message.rftoolsbuilder.extractor.collected": "Collected %s × %s",
+  "block.rftoolsbuilder.ice_generator": "Ice Generator",
+  "item.rftoolsbuilder.ice_generator": "Ice Generator",
+  "message.rftoolsbuilder.ice_generator.ready": "Ready · consumes the water source in front and produces 2 ice per second",
+  "message.rftoolsbuilder.ice_generator.no_water": "No water source at the cyan intake (%s)",
+  "message.rftoolsbuilder.ice_generator.buffered": "Internal output: %s ice · right-click with an empty hand",
+  "message.rftoolsbuilder.ice_generator.collected": "Collected %s × %s"
 }
