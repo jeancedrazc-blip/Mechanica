@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
@@ -30,14 +29,13 @@ import org.jetbrains.annotations.Nullable;
 /** Directional machine whose cyan intake consumes a water source directly in front. */
 public final class IceGeneratorBlock extends HorizontalDirectionalBlock implements EntityBlock {
     public static final MapCodec<IceGeneratorBlock> CODEC = simpleCodec(IceGeneratorBlock::new);
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public IceGeneratorBlock(BlockBehaviour.Properties properties) {
         super(properties);
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
-    @Override protected MapCodec<? extends Block> codec() { return CODEC; }
+    @Override protected MapCodec<? extends HorizontalDirectionalBlock> codec() { return CODEC; }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
